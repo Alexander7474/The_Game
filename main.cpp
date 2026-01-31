@@ -1,125 +1,114 @@
-/*
- * spriteClass.cpp
- *
- * Ce programme est distribué sous les termes de la Licence Publique
- * Générale GNU, version 3.0, telle que publiée par la Free Software
- * Foundation. Consultez la Licence Publique Générale GNU pour plus de
- * détails.
- *
- * Vous devez avoir reçu une copie de la Licence Publique Générale GNU
- * en même temps que ce programme. Si ce n'est pas le cas, consultez
- * <https://www.gnu.org/licenses/>.
- */
+#ifdef IMGUI_DEBUG
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
+#include "imgui/imgui.h"
+#endif
 
-////////////////////////////////////////////////////////////////////
-//CECI N'EST QU'UN EXEMPLE POUR TESTER SI BBOP EST BIEN INSTALLER
-////////////////////////////////////////////////////////////////////
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <cmath>
-#include <glm/fwd.hpp>
-#include <glm/glm.hpp>
-#include <chrono>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#include <iostream>
+#include <BBOP/Graphics/bbopFunc.h>
 
-#include <BBOP/Graphics.h>
+#include "engine/macro.h"
+#include "game/game.h"
 
 using namespace std;
 
-float fast_rand(float min, float max) {
-    static unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    seed = (214013 * seed + 2531011); // LCG constants
-    return min + (seed >> 16) * (1.0f / 65535.0f) * (max - min); // Scale to [min, max]
-}
-
-//tentative de simuler une bougie
-
 int main() {
-  
-  GLFWwindow * window;
-  bbopInit(1920,1080,"name",window);
-  
-  Scene scene(0.1f, Vector3i(255,255,255));
-  Camera cam;
+        // Initialisation BBOP
+        bbopInit(1920, 1080, "The game", gameWindow);
+        bbopChangeWindowResolution(640, 360);
+        glfwSwapInterval(1);
+        // affichage des logs bbop
+        for (string &s : LOGS) {
+                cout << s << endl;
+        }
 
-  AnimatedSprite bougie("imgTesting/bougie/sprite_sheet_candle1-sheet.png",Vector2i(5,1),0.1f,0);
+        // Initialisation SDL Mixer (audio)
+        if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+                ERROR_MESSAGE("Impossible d'initialiser SDL_AUDIO");
+                DEBUG_MESSAGE(SDL_GetError());
+                exit(1);
+        }
+        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+                ERROR_MESSAGE("Impossible d'initialiser Miw Open Audio");
+                DEBUG_MESSAGE(Mix_GetError());
+                SDL_Quit();
+                exit(1);
+        }
 
-  Sprite rock("imgTesting/rock.png");
-  rock.setNormalMap(Texture("imgTesting/rock_map.png"));
-  rock.setPosition(800.f,400.f);
-  rock.setSize(500.f,500.f);
-  
-  Sprite box("imgTesting/box.png");
-  box.setNormalMap(Texture("imgTesting/box_normal.png"));
-  box.setPosition(100.f,100.f);
-  box.setSize(500.f,500.f);
+#ifdef IMGUI_DEBUG
+        // Initialisation de IMGUI pour debug
+        // ImGui context
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO &io = ImGui::GetIO();
+        (void)io;
+        // Setup ImGui style
+        ImGui::StyleColorsDark();
+        ImGui::GetStyle().ScaleAllSizes(
+            1.5f); // agrandit tous les espacements, bordures, etc.
+        io.FontGlobalScale = 1.5f; // agrandit tout le texte
+        // Backend ImGui + GLFW + OpenGL
+        ImGui_ImplGlfw_InitForOpenGL(gameWindow, true);
+        ImGui_ImplOpenGL3_Init();
+#endif
 
-  bougie.setSize(270.f,270.f);
-  bougie.setOrigin(bougie.getSize().x/2.f, 55.f);
+        // Initialisation du jeu
+        Game game;
 
-  Light light(Vector2f(0.f,0.f), 0.9f, Vector3i(255,255,255),1.5f,3.0f,4.5f); // bougie
-  Vector2f maxIntensity(0.9f,1.2f); // intensité max de la bougie
-  float variation = 0.10f;
+        // main while loop
+        while (!glfwWindowShouldClose(gameWindow)) {
+                const double timeSave = glfwGetTime();
 
-   // Masquer le curseur de la souris
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+#ifdef IMGUI_DEBUG
+                // Démarrer frame ImGui
+                ImGui_ImplOpenGL3_NewFrame();
+                ImGui_ImplGlfw_NewFrame();
+                ImGui::NewFrame();
+#endif
 
-  // fond 
-  RectangleShape rectangle;
+                // clear de la fenêtre en noire
+                bbopCleanWindow(gameWindow, Vector3i(0, 0, 0), 1.0f);
 
-  while (!glfwWindowShouldClose(window))
-  {
-    // Nettoyage de la fenêtre
-    bbopCleanWindow(window, Vector3i(0,0,0),1.0);
-  
-    //taille du fond 
-    rectangle.setSize(BBOP_WINDOW_RESOLUTION.x , BBOP_WINDOW_RESOLUTION.y);
+                game.Draw();
+#ifdef IMGUI_DEBUG
+                // Interface performance
+                ImGui::Begin("Performance Info");
+                ImGui::Text("FPS: %.2f, DELTA_TIME: %.2f)", FPS, DELTA_TIME);
+                ImGui::End();
+                ImGui::Render();
+                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif
 
-    //poistion de la souris pour la light 
-    double xpos, ypos;
-    glfwGetCursorPos(window, &xpos, &ypos);
+                // vérification des erreurs
+                bbopErrorCheck();
+                // swap du back buffer avec le front buffer
+                glfwSwapBuffers(gameWindow);
+                // recupération des events glfw
+                glfwPollEvents();
 
-    // la bougie suit la souris
-    Vector2f mouseWorldPos = cam.camPosToWorldPos(cam.screenPosToCamPos(Vector2f(static_cast<float>(xpos), static_cast<float>(ypos))));
-    light.setPosition(mouseWorldPos);
-    bougie.setPosition(mouseWorldPos);
+                DELTA_TIME = glfwGetTime() - timeSave;
 
-    // variation de l'intensité de la bougie 
-    light.setIntensity(light.getIntensity() + fast_rand(-variation, variation));
-    if(light.getIntensity() > maxIntensity.y)
-      light.setIntensity(maxIntensity.y - variation);
-    if(light.getIntensity() < maxIntensity.x)
-      light.setIntensity(maxIntensity.x + variation);
+                FPS_COUNTER++;
+                if (glfwGetTime() - LAST_FPS_UPDATE >= 1.0) {
+                        FPS = FPS_COUNTER / (glfwGetTime() - LAST_FPS_UPDATE);
+                        LAST_FPS_UPDATE = glfwGetTime();
+                        FPS_COUNTER = 0;
+                }
+        }
 
-    // On 'active' la scene pour donner au shader opengl les variables uniforms
-    scene.Use();
-
-    //
-    bougie.update();
-
-    // Affichage du rectangle
-   // scene.Draw(rectangle);
-
-    scene.Draw(rock);
-    scene.Draw(box);
-    scene.Draw(bougie);
-
-    // ajout de la lumière 
-    scene.addLight(light);
-
-    // Faire le rendue du frame buffer de la fenêtre
-    scene.render();
-    
-    // Verfication d'erreur opengl
-    bbopErrorCheck();
-
-    // Passage du front buffer pour afficher le rendue opengl sur la fenêtre glfw 
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-  }
-  
-  // Suppression de la fenêtre
-  glfwDestroyWindow(window);
-  glfwTerminate();
-  
-  return 0;
+// Nettoyage
+#ifdef IMGUI_DEBUG
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+#endif
+        glfwDestroyWindow(gameWindow);
+        glfwTerminate();
+        Mix_CloseAudio();
+        SDL_Quit();
+        return 0;
 }

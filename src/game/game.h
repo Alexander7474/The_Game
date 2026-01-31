@@ -1,0 +1,40 @@
+#pragma once
+
+#include "player.h"
+
+#include <GLFW/glfw3.h>
+#include <box2d/box2d.h>
+#include <random>
+#include <string>
+#include <vector>
+#include <BBOP/Graphics.h>
+
+// pointeur vers la fentre de jeu utilisable de partout
+extern GLFWwindow *gameWindow;
+
+// Variable global du moteur de jeu
+extern double DELTA_TIME;
+extern double FPS;
+extern double FPS_COUNTER;
+extern double LAST_FPS_UPDATE;
+extern std::default_random_engine RANDOM_ENGINE;
+
+class Game {
+      private:
+        Scene scene;
+        Camera mainPlayerCam;
+        Player mainPlayer;
+      public:
+        Game();
+
+        /**
+         * @brief Met a jour la game
+         */
+        void update();
+
+        /**
+         * @brief Dessine la game avec la scene
+         */
+        void Draw();
+
+};
