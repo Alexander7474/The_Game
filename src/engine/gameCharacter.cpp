@@ -8,6 +8,7 @@
 #include <GLFW/glfw3.h>
 #include <cmath>
 #include <memory>
+#include <utility>
 
 #include "../game/game.h"
 #include "gameCharacter.h"
@@ -18,6 +19,9 @@ std::string bodyStateToString(BodyState e) noexcept
     {
       case BodyState::idle: return "idle";
       case BodyState::running: return "running";
+      case BodyState::smoking: return "smoking";
+      case BodyState::attacking: return "attacking";
+      case BodyState::dead: return "dead";
       default: return "unknow";
     }
 }
@@ -29,20 +33,23 @@ GameCharacter::GameCharacter(std::string characterFolder)
         acceleration = 1500.f;
         deceleration = 10.f;
 
-        body.setSize(32,32);
-        legs.setSize(32,32);
+        body.setSize(64,64);
+        legs.setSize(64,64);
         body.setOrigin(body.getSize().x/2.f, body.getSize().y/2.f);
         legs.setOrigin(legs.getSize().x/2.f, legs.getSize().y/2.f);
 
-        bState = BodyState::idle;
+        bState = {BodyState::idle, WeaponName::fist};
         lState = LegsState::idle;
 
         // chargement des animations du character pour chaque état
-        std::string path = "assets/"+characterFolder+"body/"+bodyStateToString(BodyState::idle)+".png";
-        bodyAnimations[BodyState::idle].textures = bbopLoadSpriteSheet(path.c_str(), 1, 1);
+        std::string path = "assets/"+characterFolder+"body/idle.png";
+        bodyAnimations[{BodyState::idle, WeaponName::fist}].textures = bbopLoadSpriteSheet(path.c_str(), 1, 1);
 
-        path = "assets/"+characterFolder+"body/"+bodyStateToString(BodyState::running)+".png";
-        bodyAnimations[BodyState::running].textures = bbopLoadSpriteSheet(path.c_str(), 6, 1);
+        path = "assets/"+characterFolder+"body/running.png";
+        bodyAnimations[{BodyState::running, WeaponName::fist}].textures = bbopLoadSpriteSheet(path.c_str(), 8, 1);
+
+        path = "assets/"+characterFolder+"body/attacking.png";
+        bodyAnimations[{BodyState::attacking, WeaponName::fist}].textures = bbopLoadSpriteSheet(path.c_str(), 6, 1);
 
         path = "assets/"+characterFolder+"legs/"+bodyStateToString(BodyState::idle)+".png";
         legsAnimations[LegsState::idle].textures = bbopLoadSpriteSheet(path.c_str(), 1, 1);
@@ -75,22 +82,26 @@ void GameCharacter::update() {
         angle = atan2(speed.y, speed.x);
         legs.setRotation(angle);
 
-        // gestion des états
         if(movement == glm::vec2(0,0)){
-          bState = BodyState::idle;
-          lState = LegsState::idle;
+          if(bState.first == BodyState::running)
+            this->switchState(BodyState::idle);
           legs.setRotation(body.getRotation());
         }
 
+        legs.setTexture(legsAnimations[lState].textures[legsAnimations[lState].frame]);
+        body.setTexture(bodyAnimations[bState].textures[bodyAnimations[bState].frame]);
+        
         // animation du personnage
         if(glfwGetTime() - bodyAnimations[bState].lastFrameTime >= GAME_SPEED){
                 bodyAnimations[bState].frame++;
                 bodyAnimations[bState].lastFrameTime = glfwGetTime();
 
-                if(bodyAnimations[bState].frame == bodyAnimations[bState].textures.size())
+                if(bodyAnimations[bState].frame == bodyAnimations[bState].textures.size()){
                   bodyAnimations[bState].frame = 0;
+                  
+                  this->switchState(BodyState::idle);
+                }
                 
-                body.setTexture(bodyAnimations[bState].textures[bodyAnimations[bState].frame]);
         }
           
         // animation des jambes
@@ -101,9 +112,8 @@ void GameCharacter::update() {
                 if(legsAnimations[lState].frame == legsAnimations[lState].textures.size())
                   legsAnimations[lState].frame = 0;
                 
-                legs.setTexture(legsAnimations[lState].textures[legsAnimations[lState].frame]);
         }
-        
+
 
 
 #ifdef IMGUI_DEBUG
@@ -114,8 +124,9 @@ void GameCharacter::update() {
         ImGui::Text("speed vector: (%f, %f)", speed.x, speed.y);
         ImGui::Text("speed: %f", abs(speed.x) + abs(speed.y));
         ImGui::Text("Looking point: (%f, %f)", lookingPoint.x, lookingPoint.y);
-        ImGui::Text("Looking Angle: %f", angle);
-        ImGui::Text("BodyState: %s", bodyStateToString(bState).c_str());
+        ImGui::Text("Body Angle: %f", body.getRotation());
+        ImGui::Text("Legs Angle: %f", legs.getRotation());
+        ImGui::Text("BodyState pair: {%s, %s}", bodyStateToString(bState.first).c_str(), weaponNameToString(bState.second).c_str());
         ImGui::End();
 #endif
  
@@ -130,6 +141,38 @@ void GameCharacter::Draw(GLint *renderUniforms) const {
         body.Draw(renderUniforms);
 }
 
+void GameCharacter::switchState(BodyState state){
+        switch(state){
+          case BodyState::idle:
+            bState.first = BodyState::idle;
+            lState = LegsState::idle;
+            bodyAnimations[bState].lastFrameTime = glfwGetTime();
+            break;
+          case BodyState::smoking:
+            bState.first = BodyState::smoking;
+            bodyAnimations[bState].lastFrameTime = glfwGetTime();
+            break;
+          case BodyState::running:
+            if(bState.first != BodyState::attacking && bState.first != BodyState::running){
+              bState.first = BodyState::running;
+              lState = LegsState::running;
+              bodyAnimations[bState].lastFrameTime = glfwGetTime();
+            }
+            break;
+          case BodyState::attacking:
+            if(bState.first != BodyState::attacking) {
+              bState.first = BodyState::attacking;
+              bodyAnimations[bState].lastFrameTime = glfwGetTime();
+            }
+            break;
+          case BodyState::dead:
+            bState.first = BodyState::dead;
+            bodyAnimations[bState].lastFrameTime = glfwGetTime();
+            break;
+          default:
+            break;
+        }
+}
 
 void GameCharacter::lookAt(glm::vec2 point){
         lookingPoint = point;
@@ -137,10 +180,13 @@ void GameCharacter::lookAt(glm::vec2 point){
 
 void GameCharacter::move(glm::vec2 moveVec) {
         movement += moveVec;
-        bState = BodyState::running;
-        lState = LegsState::running;
+        this->switchState(BodyState::running);
 }
 
 void GameCharacter::move(float x, float y) {
         this->move(glm::vec2(x,y));
+}
+
+void GameCharacter::useWeapon(){
+        this->switchState(BodyState::attacking);
 }

@@ -40,7 +40,11 @@ void Player::update() {
         if (keys[GLFW_KEY_A]) {
           character.move(-1.f, 0.f);
         }
- 
+
+        if (glfwGetMouseButton(gameWindow, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+          character.useWeapon();
+        }
+
         character.update();
 }
 

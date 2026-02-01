@@ -1,8 +1,10 @@
 #ifndef GAME_CHARACTER_H
 #define GAME_CHARACTER_H
 
+#include <iostream>
 #include <memory>
 #include <string>
+#include <utility>
 #include <unordered_map>
 #include <vector>
 #include <glm/vec2.hpp>
@@ -10,16 +12,15 @@
 #include <BBOP/Graphics/bbopMathClass.h>
 
 #include "animation.h"
+#include "weapon.h"
 
 enum class BodyState { 
   idle,
   running,
   smoking,
-  gun,
-  gunShooting,
+  attacking,
   dead 
 };
-
 std::string bodyStateToString(BodyState e) noexcept;
 
 enum class LegsState {
@@ -27,20 +28,29 @@ enum class LegsState {
   running
 };
 
+// Permet de hash la paire entre BodyState et WeaponName
+struct PairHash {
+    std::size_t operator()(const std::pair<BodyState, WeaponName>& p) const noexcept {
+        return (static_cast<std::size_t>(p.first) << 32)
+             ^  static_cast<std::size_t>(p.second);
+    }
+};
+
 class GameCharacter : public BbopDrawable, public Geometric{
       private:
-        float hp;
-
         Sprite legs;
         Sprite body;
         
-        std::unordered_map<BodyState, Animation> bodyAnimations;
+        std::unordered_map<std::pair<BodyState, WeaponName>, Animation, PairHash> bodyAnimations;
         std::unordered_map<LegsState, Animation> legsAnimations;
 
-        BodyState bState;
+        std::pair<BodyState, WeaponName> bState;
         LegsState lState;
 
+        std::unique_ptr<Weapon> weapon;
+
         // utiliser la la logique d'update
+        float hp;
         glm::vec2 lookingPoint;
         glm::vec2 movement;
         float acceleration;
@@ -73,6 +83,16 @@ class GameCharacter : public BbopDrawable, public Geometric{
          */
         void move(glm::vec2 moveVec);
         void move(float x, float y);
+
+        /**
+         * @brief Utiise l'arme équipé
+         */
+        void useWeapon();
+
+        /**
+         * Change l'état du personnage
+         */
+        void switchState(BodyState state);
 };
 
 #endif
