@@ -20,11 +20,23 @@ GameCharacter::GameCharacter()
 }
 
 void GameCharacter::update() {
+        // fais suivre les legs et le body sur la posisition du character 
+        legs.setPosition(getPosition());
+        body.setPosition(getPosition());
+
+        // calcule angle avec le looking point
+        glm::vec2 pos(getPosition().x, getPosition().y);
+        float dot = glm::dot(glm::normalize(pos), glm::normalize(lookingPoint));
+        dot = glm::clamp(dot, -1.f, 1.f);
+        float angle = glm::acos(dot);
+
 #ifdef IMGUI_DEBUG
         // Interface character info
         ImGui::Begin("GameCharacter Info");
         ImGui::Text("Health Point: %f", hp);
         ImGui::Text("Position: (%f, %f)", getPosition().x, getPosition().y);
+        ImGui::Text("Looking point: (%f, %f)", lookingPoint.x, lookingPoint.y);
+        ImGui::Text("Looking Angle: %f", angle);
         ImGui::End();
 #endif
 }
@@ -32,4 +44,17 @@ void GameCharacter::update() {
 void GameCharacter::Draw(GLint *renderUniforms) const {
         legs.Draw(renderUniforms);
         body.Draw(renderUniforms);
+}
+
+
+void GameCharacter::lookAt(glm::vec2 point){
+        lookingPoint = point;
+}
+
+void GameCharacter::move(glm::vec2 moveVec) {
+        setPosition(getPosition().x + moveVec.x, getPosition().y + moveVec.y);
+}
+
+void GameCharacter::move(float x, float y) {
+        setPosition(getPosition().x + x, getPosition().y + y);
 }

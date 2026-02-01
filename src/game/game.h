@@ -3,7 +3,6 @@
 #include "player.h"
 
 #include <GLFW/glfw3.h>
-#include <box2d/box2d.h>
 #include <random>
 #include <string>
 #include <vector>
@@ -37,4 +36,6 @@ class Game {
          */
         void Draw();
 
+        //GETTER 
+        Camera *getMainPlayerCam();
 };

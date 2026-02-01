@@ -12,6 +12,7 @@
 #include <BBOP/Graphics/bbopFunc.h>
 
 #include "engine/macro.h"
+#include "engine/keys.h"
 #include "game/game.h"
 
 using namespace std;
@@ -21,6 +22,9 @@ int main() {
         bbopInit(1920, 1080, "The game", gameWindow);
         bbopChangeWindowResolution(640, 360);
         glfwSwapInterval(1);
+        //masquer la souris
+        glfwSetInputMode(gameWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetKeyCallback(gameWindow, key_callback);
         // affichage des logs bbop
         for (string &s : LOGS) {
                 cout << s << endl;
@@ -73,6 +77,7 @@ int main() {
                 // clear de la fenêtre en noire
                 bbopCleanWindow(gameWindow, Vector3i(0, 0, 0), 1.0f);
 
+                game.update();
                 game.Draw();
 #ifdef IMGUI_DEBUG
                 // Interface performance

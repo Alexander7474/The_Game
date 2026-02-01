@@ -148,6 +148,9 @@ else()
     message(FATAL_ERROR "LDtkLoader introuvable")
 endif()
 
+# LIen symbolique pour le dossier assets
+ADD_CUSTOM_TARGET(link_target ALL
+                  COMMAND ${CMAKE_COMMAND} -E create_symlink ../assets assets)
 # =========================
 # Flags de debug
 # =========================

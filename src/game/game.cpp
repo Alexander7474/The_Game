@@ -17,11 +17,18 @@ Game::Game()
 {}
 
 void Game::update() {
+        mainPlayer.update();
         // update des éléments des la game
 }
 
 void Game::Draw() {
         scene.Use();
+        scene.useCamera(&mainPlayerCam);
         scene.Draw(mainPlayer);
         scene.render();
+}
+
+Camera *Game::getMainPlayerCam()
+{
+  return &mainPlayerCam;
 }
