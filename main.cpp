@@ -21,10 +21,10 @@ int main() {
         // Initialisation BBOP
         bbopInit(1920, 1080, "The game", gameWindow);
         bbopChangeWindowResolution(640, 360);
-        glfwSwapInterval(1);
         //masquer la souris
         glfwSetInputMode(gameWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         glfwSetKeyCallback(gameWindow, key_callback);
+        glfwSwapInterval(1);
         // affichage des logs bbop
         for (string &s : LOGS) {
                 cout << s << endl;
@@ -75,7 +75,7 @@ int main() {
 #endif
 
                 // clear de la fenêtre en noire
-                bbopCleanWindow(gameWindow, Vector3i(0, 0, 0), 1.0f);
+                bbopCleanWindow(gameWindow, Vector3i(150, 150, 150), 1.0f);
 
                 game.update();
                 game.Draw();

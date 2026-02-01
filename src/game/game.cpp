@@ -10,6 +10,7 @@ double DELTA_TIME = 0;
 double FPS = 0;
 double FPS_COUNTER = 0;
 double LAST_FPS_UPDATE = glfwGetTime();
+double GAME_SPEED = 1.0/10.0;
 std::default_random_engine RANDOM_ENGINE;
 
 Game::Game()

@@ -16,6 +16,7 @@ extern double DELTA_TIME;
 extern double FPS;
 extern double FPS_COUNTER;
 extern double LAST_FPS_UPDATE;
+extern double GAME_SPEED;
 extern std::default_random_engine RANDOM_ENGINE;
 
 class Game {
