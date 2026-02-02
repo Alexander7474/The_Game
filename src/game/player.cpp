@@ -44,6 +44,11 @@ void Player::update() {
         if (glfwGetMouseButton(gameWindow, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
           character.useWeapon();
         }
+        if (glfwGetMouseButton(gameWindow, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+          character.pickup(true);
+        }else{
+          character.pickup(false);
+        }
 
         character.update();
 }

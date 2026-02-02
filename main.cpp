@@ -24,7 +24,7 @@ int main() {
         //masquer la souris
         glfwSetInputMode(gameWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         glfwSetKeyCallback(gameWindow, key_callback);
-        glfwSwapInterval(1);
+        glfwSwapInterval(0);
         // affichage des logs bbop
         for (string &s : LOGS) {
                 cout << s << endl;

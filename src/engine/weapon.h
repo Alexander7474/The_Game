@@ -19,5 +19,7 @@ class Weapon : public Sprite
   public:
     Weapon(WeaponName name = WeaponName::fist, std::string texturePath = "assets/default.png");
  
+    void update();
+
     const WeaponName getName();
 };

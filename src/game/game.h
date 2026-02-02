@@ -1,6 +1,7 @@
 #pragma once
 
 #include "player.h"
+#include "../engine/weapon.h"
 
 #include <GLFW/glfw3.h>
 #include <random>
@@ -24,6 +25,10 @@ class Game {
         Scene scene;
         Camera mainPlayerCam;
         Player mainPlayer;
+
+        //test shit
+        GameCharacter dummy;
+        std::unique_ptr<Weapon> testWeapon;
       public:
         Game();
 

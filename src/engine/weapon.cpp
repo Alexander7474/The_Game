@@ -18,6 +18,14 @@ Weapon::Weapon(WeaponName name, std::string texturePath)
 {
   this->name = name;
   setSize(64,64);
+  setOrigin(32,32);
+  getCollisionBox().setSize(32,32);
+  getCollisionBox().setOrigin(16,16);
+  setAutoUpdateCollision(false);
+}
+
+void Weapon::update(){
+  getCollisionBox().setPosition(getPosition());
 }
 
 const WeaponName Weapon::getName()

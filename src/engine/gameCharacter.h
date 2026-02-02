@@ -56,6 +56,7 @@ class GameCharacter : public BbopDrawable, public Geometric{
         float acceleration;
         float deceleration;
         glm::vec2 speed;
+        bool pickupFlag;
       public:
         GameCharacter(std::string characterFolder = "player/");
 
@@ -90,9 +91,28 @@ class GameCharacter : public BbopDrawable, public Geometric{
         void useWeapon();
 
         /**
-         * Change l'état du personnage
+         * @brief Met le pickup flag sur true ou false
+         */
+        void pickup(bool s);
+        bool isPicking();
+
+        /**
+         * @brief remplace le weapon par un autre
+         */
+        void changeWeapon(std::unique_ptr<Weapon> &newWeapon);
+
+        /**
+         * @brief Change l'état du personnage
          */
         void switchState(BodyState state);
+
+        /*
+         * @brief attaque ?
+         */
+        bool isLetal();
+
+        Sprite *getBody();
+        Sprite *getLegs();
 };
 
 #endif

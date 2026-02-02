@@ -33,12 +33,21 @@ GameCharacter::GameCharacter(std::string characterFolder)
         acceleration = 1500.f;
         deceleration = 10.f;
 
+        lookingPoint = glm::vec2(200,200);
+
         body.setSize(64,64);
         legs.setSize(64,64);
         body.setOrigin(body.getSize().x/2.f, body.getSize().y/2.f);
         legs.setOrigin(legs.getSize().x/2.f, legs.getSize().y/2.f);
 
-        bState = {BodyState::idle, WeaponName::fist};
+        // TODO - Patcher les collision de Bbop (checkRotation et gestion de l'offset avec l'origine)
+        body.getCollisionBox().setSize(20,20);
+        body.getCollisionBox().setOrigin(10,10);
+        body.setAutoUpdateCollision(false);
+
+        weapon = std::make_unique<Weapon>(WeaponName::fist);
+
+        bState = {BodyState::idle, weapon->getName()};
         lState = LegsState::idle;
 
         // chargement des animations du character pour chaque état
@@ -50,6 +59,7 @@ GameCharacter::GameCharacter(std::string characterFolder)
 
         path = "assets/"+characterFolder+"body/attacking.png";
         bodyAnimations[{BodyState::attacking, WeaponName::fist}].textures = bbopLoadSpriteSheet(path.c_str(), 6, 1);
+        bodyAnimations[{BodyState::attacking, WeaponName::fist}].knockoutRange = {1,4};
 
         path = "assets/"+characterFolder+"body/idle_bate.png";
         bodyAnimations[{BodyState::idle, WeaponName::bate}].textures = bbopLoadSpriteSheet(path.c_str(), 1, 1);
@@ -59,6 +69,13 @@ GameCharacter::GameCharacter(std::string characterFolder)
 
         path = "assets/"+characterFolder+"body/attacking_bate.png";
         bodyAnimations[{BodyState::attacking, WeaponName::bate}].textures = bbopLoadSpriteSheet(path.c_str(), 1, 8);
+        bodyAnimations[{BodyState::attacking, WeaponName::bate}].letalRange = {3,7};
+
+        // nombre aléatoire pour le sprite de mort
+        std::string deadId = std::to_string(std::uniform_int_distribution<int>(0, 2)(RANDOM_ENGINE));
+        path = "assets/"+characterFolder+"body/dead"+deadId+".png";
+        bodyAnimations[{BodyState::dead, WeaponName::fist}].textures = bbopLoadSpriteSheet(path.c_str(), 1, 1);
+        std::cerr << deadId << '\n';
 
         path = "assets/"+characterFolder+"legs/"+bodyStateToString(BodyState::idle)+".png";
         legsAnimations[LegsState::idle].textures = bbopLoadSpriteSheet(path.c_str(), 1, 1);
@@ -79,6 +96,7 @@ void GameCharacter::update() {
         // fais suivre les legs et le body sur la posisition du character 
         legs.setPosition(getPosition());
         body.setPosition(getPosition());
+        body.getCollisionBox().setPosition(getPosition());
 
         // calcule angle avec le looking point
         glm::vec2 pos(getPosition().x, getPosition().y);
@@ -135,6 +153,8 @@ void GameCharacter::update() {
         ImGui::Text("Legs Angle: %f", legs.getRotation());
         ImGui::Text("BodyState pair: {%s, %s}", bodyStateToString(bState.first).c_str(), weaponNameToString(bState.second).c_str());
         ImGui::Text("Body Frame: %d", bodyAnimations[bState].frame);
+        ImGui::Text("isLetal: %d", this->isLetal());
+        ImGui::Text("pickupFlag: %d", pickupFlag);
         ImGui::End();
 #endif
  
@@ -150,11 +170,13 @@ void GameCharacter::Draw(GLint *renderUniforms) const {
 }
 
 void GameCharacter::switchState(BodyState state){
+        if(bState.first == BodyState::dead)
+          return;
+
         switch(state){
           case BodyState::idle:
             if(bState.first == BodyState::idle)
               break;
-            //si le joueur était en attaque 
             if(bState.first == BodyState::attacking)
               body.flipHorizontally();
             bState.first = BodyState::idle;
@@ -179,7 +201,7 @@ void GameCharacter::switchState(BodyState state){
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;
           case BodyState::dead:
-            bState.first = BodyState::dead;
+            bState = {BodyState::dead, WeaponName::fist};
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;
           default:
@@ -202,4 +224,35 @@ void GameCharacter::move(float x, float y) {
 
 void GameCharacter::useWeapon(){
         this->switchState(BodyState::attacking);
+}
+
+Sprite *GameCharacter::getBody(){
+        return &body;
+}
+
+Sprite *GameCharacter::getLegs(){
+        return &legs;
+}
+
+bool GameCharacter::isLetal(){
+        if(bState.first == BodyState::attacking && bodyAnimations[bState].frame >= bodyAnimations[bState].letalRange.first && bodyAnimations[bState].frame <= bodyAnimations[bState].letalRange.second)
+          return true;
+        return false;
+}
+
+void GameCharacter::pickup(bool s){
+        pickupFlag = s;
+}
+
+bool GameCharacter::isPicking() {
+        return pickupFlag;
+}
+
+void GameCharacter::changeWeapon(std::unique_ptr<Weapon> &newWeapon){
+        if(weapon->getName() == WeaponName::fist){
+          std::swap(newWeapon, weapon);
+        }else{
+          std::swap(newWeapon, weapon);
+        }
+        bState.second = weapon->getName();
 }
