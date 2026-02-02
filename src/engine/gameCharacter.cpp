@@ -51,6 +51,15 @@ GameCharacter::GameCharacter(std::string characterFolder)
         path = "assets/"+characterFolder+"body/attacking.png";
         bodyAnimations[{BodyState::attacking, WeaponName::fist}].textures = bbopLoadSpriteSheet(path.c_str(), 6, 1);
 
+        path = "assets/"+characterFolder+"body/idle_bate.png";
+        bodyAnimations[{BodyState::idle, WeaponName::bate}].textures = bbopLoadSpriteSheet(path.c_str(), 1, 1);
+
+        path = "assets/"+characterFolder+"body/running_bate.png";
+        bodyAnimations[{BodyState::running, WeaponName::bate}].textures = bbopLoadSpriteSheet(path.c_str(), 8, 1);
+
+        path = "assets/"+characterFolder+"body/attacking_bate.png";
+        bodyAnimations[{BodyState::attacking, WeaponName::bate}].textures = bbopLoadSpriteSheet(path.c_str(), 1, 8);
+
         path = "assets/"+characterFolder+"legs/"+bodyStateToString(BodyState::idle)+".png";
         legsAnimations[LegsState::idle].textures = bbopLoadSpriteSheet(path.c_str(), 1, 1);
 
@@ -88,15 +97,12 @@ void GameCharacter::update() {
           legs.setRotation(body.getRotation());
         }
 
-        legs.setTexture(legsAnimations[lState].textures[legsAnimations[lState].frame]);
-        body.setTexture(bodyAnimations[bState].textures[bodyAnimations[bState].frame]);
-        
         // animation du personnage
         if(glfwGetTime() - bodyAnimations[bState].lastFrameTime >= GAME_SPEED){
                 bodyAnimations[bState].frame++;
                 bodyAnimations[bState].lastFrameTime = glfwGetTime();
 
-                if(bodyAnimations[bState].frame == bodyAnimations[bState].textures.size()){
+                if(bodyAnimations[bState].frame >= bodyAnimations[bState].textures.size()){
                   bodyAnimations[bState].frame = 0;
                   
                   this->switchState(BodyState::idle);
@@ -114,7 +120,8 @@ void GameCharacter::update() {
                 
         }
 
-
+        legs.setTexture(legsAnimations[lState].textures[legsAnimations[lState].frame]);
+        body.setTexture(bodyAnimations[bState].textures[bodyAnimations[bState].frame]);
 
 #ifdef IMGUI_DEBUG
         // Interface character info
@@ -127,6 +134,7 @@ void GameCharacter::update() {
         ImGui::Text("Body Angle: %f", body.getRotation());
         ImGui::Text("Legs Angle: %f", legs.getRotation());
         ImGui::Text("BodyState pair: {%s, %s}", bodyStateToString(bState.first).c_str(), weaponNameToString(bState.second).c_str());
+        ImGui::Text("Body Frame: %d", bodyAnimations[bState].frame);
         ImGui::End();
 #endif
  
@@ -144,6 +152,11 @@ void GameCharacter::Draw(GLint *renderUniforms) const {
 void GameCharacter::switchState(BodyState state){
         switch(state){
           case BodyState::idle:
+            if(bState.first == BodyState::idle)
+              break;
+            //si le joueur était en attaque 
+            if(bState.first == BodyState::attacking)
+              body.flipHorizontally();
             bState.first = BodyState::idle;
             lState = LegsState::idle;
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
@@ -153,17 +166,17 @@ void GameCharacter::switchState(BodyState state){
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;
           case BodyState::running:
-            if(bState.first != BodyState::attacking && bState.first != BodyState::running){
-              bState.first = BodyState::running;
-              lState = LegsState::running;
-              bodyAnimations[bState].lastFrameTime = glfwGetTime();
-            }
+            if(bState.first == BodyState::attacking || bState.first == BodyState::running)
+              break;
+            bState.first = BodyState::running;
+            lState = LegsState::running;
+            bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;
           case BodyState::attacking:
-            if(bState.first != BodyState::attacking) {
-              bState.first = BodyState::attacking;
-              bodyAnimations[bState].lastFrameTime = glfwGetTime();
-            }
+            if(bState.first == BodyState::attacking)
+              break;
+            bState.first = BodyState::attacking;
+            bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;
           case BodyState::dead:
             bState.first = BodyState::dead;
