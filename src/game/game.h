@@ -18,6 +18,7 @@ extern double FPS;
 extern double FPS_COUNTER;
 extern double LAST_FPS_UPDATE;
 extern double GAME_SPEED;
+extern double ANIM_SPEED;
 extern std::default_random_engine RANDOM_ENGINE;
 
 class Game {
@@ -25,10 +26,9 @@ class Game {
         Scene scene;
         Camera mainPlayerCam;
         Player mainPlayer;
-
-        //test shit
+ 
+        std::vector<Weapon*> weapons;
         GameCharacter dummy;
-        std::unique_ptr<Weapon> testWeapon;
       public:
         Game();
 

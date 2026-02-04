@@ -41,10 +41,10 @@ void Player::update() {
           character.move(-1.f, 0.f);
         }
 
-        if (glfwGetMouseButton(gameWindow, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+        if (mouseButton[GLFW_MOUSE_BUTTON_LEFT]) {
           character.useWeapon();
         }
-        if (glfwGetMouseButton(gameWindow, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+        if (mouseButton[GLFW_MOUSE_BUTTON_RIGHT]) {
           character.pickup(true);
         }else{
           character.pickup(false);

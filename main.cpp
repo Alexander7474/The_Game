@@ -23,8 +23,9 @@ int main() {
         bbopChangeWindowResolution(640, 360);
         //masquer la souris
         glfwSetInputMode(gameWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetMouseButtonCallback(gameWindow, mouse_button_callback);
         glfwSetKeyCallback(gameWindow, key_callback);
-        glfwSwapInterval(0);
+        glfwSwapInterval(1);
         // affichage des logs bbop
         for (string &s : LOGS) {
                 cout << s << endl;
@@ -87,7 +88,6 @@ int main() {
                 ImGui::Render();
                 ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif
-
                 // vérification des erreurs
                 bbopErrorCheck();
                 // swap du back buffer avec le front buffer
@@ -95,7 +95,7 @@ int main() {
                 // recupération des events glfw
                 glfwPollEvents();
 
-                DELTA_TIME = glfwGetTime() - timeSave;
+                DELTA_TIME = (glfwGetTime() - timeSave)*GAME_SPEED;
 
                 FPS_COUNTER++;
                 if (glfwGetTime() - LAST_FPS_UPDATE >= 1.0) {

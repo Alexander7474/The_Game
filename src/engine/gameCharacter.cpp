@@ -45,7 +45,9 @@ GameCharacter::GameCharacter(std::string characterFolder)
         body.getCollisionBox().setOrigin(10,10);
         body.setAutoUpdateCollision(false);
 
-        weapon = std::make_unique<Weapon>(WeaponName::fist);
+        weapon = new Weapon;
+        switchWeaponCooldown = 0.2;
+        lastWeaponSwitch = 0.0;
 
         bState = {BodyState::idle, weapon->getName()};
         lState = LegsState::idle;
@@ -75,7 +77,6 @@ GameCharacter::GameCharacter(std::string characterFolder)
         std::string deadId = std::to_string(std::uniform_int_distribution<int>(0, 2)(RANDOM_ENGINE));
         path = "assets/"+characterFolder+"body/dead"+deadId+".png";
         bodyAnimations[{BodyState::dead, WeaponName::fist}].textures = bbopLoadSpriteSheet(path.c_str(), 1, 1);
-        std::cerr << deadId << '\n';
 
         path = "assets/"+characterFolder+"legs/"+bodyStateToString(BodyState::idle)+".png";
         legsAnimations[LegsState::idle].textures = bbopLoadSpriteSheet(path.c_str(), 1, 1);
@@ -85,7 +86,6 @@ GameCharacter::GameCharacter(std::string characterFolder)
 }
 
 void GameCharacter::update() {
-        
         if(abs(movement.x) + abs(movement.y) >= 2){
           movement /= 2.f;
         }
@@ -96,6 +96,10 @@ void GameCharacter::update() {
         // fais suivre les legs et le body sur la posisition du character 
         legs.setPosition(getPosition());
         body.setPosition(getPosition());
+        if(weapon == nullptr)
+          std::cerr << "Erreur avec le pointeur weapon de GameCharacter" << std::endl;
+        weapon->setPosition(getPosition());
+        weapon->update();
         body.getCollisionBox().setPosition(getPosition());
 
         // calcule angle avec le looking point
@@ -116,7 +120,7 @@ void GameCharacter::update() {
         }
 
         // animation du personnage
-        if(glfwGetTime() - bodyAnimations[bState].lastFrameTime >= GAME_SPEED){
+        if(glfwGetTime() - bodyAnimations[bState].lastFrameTime >= ANIM_SPEED/GAME_SPEED){
                 bodyAnimations[bState].frame++;
                 bodyAnimations[bState].lastFrameTime = glfwGetTime();
 
@@ -129,7 +133,7 @@ void GameCharacter::update() {
         }
           
         // animation des jambes
-        if(glfwGetTime() - legsAnimations[lState].lastFrameTime >= GAME_SPEED){
+        if(glfwGetTime() - legsAnimations[lState].lastFrameTime >= ANIM_SPEED/GAME_SPEED){
                 legsAnimations[lState].frame++;
                 legsAnimations[lState].lastFrameTime = glfwGetTime();
 
@@ -248,11 +252,26 @@ bool GameCharacter::isPicking() {
         return pickupFlag;
 }
 
-void GameCharacter::changeWeapon(std::unique_ptr<Weapon> &newWeapon){
-        if(weapon->getName() == WeaponName::fist){
-          std::swap(newWeapon, weapon);
-        }else{
-          std::swap(newWeapon, weapon);
-        }
+// TODO -- L'echange d'arme entre game et character c'est du voodoo
+void GameCharacter::changeWeapon(Weapon*& newWeapon){
+        if(glfwGetTime() - lastWeaponSwitch <= switchWeaponCooldown)
+          return;
+        Weapon *tmp = weapon;
+        weapon = newWeapon;
+        newWeapon = tmp;
         bState.second = weapon->getName();
+        lastWeaponSwitch = glfwGetTime();
+}
+
+Weapon* GameCharacter::dropWeapon() {
+        // TODO - c'est de la merde
+        if(glfwGetTime() - lastWeaponSwitch <= switchWeaponCooldown)
+          return nullptr;
+        if(weapon->getName() == WeaponName::fist)
+          return nullptr;
+        Weapon *tmp = weapon;
+        weapon = new Weapon();
+        bState.second = weapon->getName();
+        lastWeaponSwitch = glfwGetTime();
+        return tmp;
 }

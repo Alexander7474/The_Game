@@ -25,7 +25,7 @@ Weapon::Weapon(WeaponName name, std::string texturePath)
 }
 
 void Weapon::update(){
-  getCollisionBox().setPosition(getPosition());
+  shapeCollisionBox.setPosition(getPosition());
 }
 
 const WeaponName Weapon::getName()

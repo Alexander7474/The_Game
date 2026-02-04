@@ -47,7 +47,7 @@ class GameCharacter : public BbopDrawable, public Geometric{
         std::pair<BodyState, WeaponName> bState;
         LegsState lState;
 
-        std::unique_ptr<Weapon> weapon;
+        Weapon* weapon;
 
         // utiliser la la logique d'update
         float hp;
@@ -57,6 +57,11 @@ class GameCharacter : public BbopDrawable, public Geometric{
         float deceleration;
         glm::vec2 speed;
         bool pickupFlag;
+
+        // Pour l'instant le cooldown ne prend pas en compte la vitesse du temps dans le jeu
+        // je n'en voit pas l'interet
+        double switchWeaponCooldown;
+        double lastWeaponSwitch;
       public:
         GameCharacter(std::string characterFolder = "player/");
 
@@ -99,7 +104,8 @@ class GameCharacter : public BbopDrawable, public Geometric{
         /**
          * @brief remplace le weapon par un autre
          */
-        void changeWeapon(std::unique_ptr<Weapon> &newWeapon);
+        void changeWeapon(Weapon*& newWeapon);
+        Weapon* dropWeapon();
 
         /**
          * @brief Change l'état du personnage
