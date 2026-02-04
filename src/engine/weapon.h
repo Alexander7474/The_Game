@@ -22,4 +22,14 @@ class Weapon : public Sprite
     void update();
 
     const WeaponName getName();
+
+    virtual ~Weapon() = default;
+};
+
+class Firearme : public Weapon 
+{
+  private:
+    int ammo;
+  public:
+    Firearme(WeaponName name = WeaponName::gun,  std::string texturePath = "assets/weapons/gun.png");
 };

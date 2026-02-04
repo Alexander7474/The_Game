@@ -73,6 +73,15 @@ GameCharacter::GameCharacter(std::string characterFolder)
         bodyAnimations[{BodyState::attacking, WeaponName::bate}].textures = bbopLoadSpriteSheet(path.c_str(), 1, 8);
         bodyAnimations[{BodyState::attacking, WeaponName::bate}].letalRange = {3,7};
 
+        path = "assets/"+characterFolder+"body/idle_gun.png";
+        bodyAnimations[{BodyState::idle, WeaponName::gun}].textures = bbopLoadSpriteSheet(path.c_str(), 1, 1);
+
+        path = "assets/"+characterFolder+"body/running_gun.png";
+        bodyAnimations[{BodyState::running, WeaponName::gun}].textures = bbopLoadSpriteSheet(path.c_str(), 8, 1);
+
+        path = "assets/"+characterFolder+"body/attacking_gun.png";
+        bodyAnimations[{BodyState::attacking, WeaponName::gun}].textures = bbopLoadSpriteSheet(path.c_str(), 1, 2);
+
         // nombre aléatoire pour le sprite de mort
         std::string deadId = std::to_string(std::uniform_int_distribution<int>(0, 2)(RANDOM_ENGINE));
         path = "assets/"+characterFolder+"body/dead"+deadId+".png";
@@ -181,7 +190,7 @@ void GameCharacter::switchState(BodyState state){
           case BodyState::idle:
             if(bState.first == BodyState::idle)
               break;
-            if(bState.first == BodyState::attacking)
+            if(bState.first == BodyState::attacking && dynamic_cast<Firearme*>(weapon) == nullptr)
               body.flipHorizontally();
             bState.first = BodyState::idle;
             lState = LegsState::idle;

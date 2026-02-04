@@ -26,7 +26,9 @@ Game::Game()
 {
   dummy.setPosition(200,200);
   weapons.push_back(new Weapon(WeaponName::bate, "assets/weapons/bate.png"));
+  weapons.push_back(new Firearme());
   weapons[0]->setPosition(200,150);
+  weapons[1]->setPosition(200,100);
 }
 
 void Game::update() {

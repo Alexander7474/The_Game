@@ -32,3 +32,9 @@ const WeaponName Weapon::getName()
 {
   return name;
 }
+
+Firearme::Firearme(WeaponName name, std::string texturePath)
+  : Weapon(name, texturePath)
+{
+  ammo = 15;
+}
