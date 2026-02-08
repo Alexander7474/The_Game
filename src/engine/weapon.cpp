@@ -32,6 +32,11 @@ void Weapon::update(){
   shapeCollisionBox.setPosition(getPosition());
 }
 
+void Weapon::use(){
+  Mix_Chunk* gunSound = Mix_LoadWAV("assets/sounds/punch0.wav");
+  Mix_PlayChannel(-1, gunSound, 0);
+}
+
 const WeaponName Weapon::getName()
 {
   return name;

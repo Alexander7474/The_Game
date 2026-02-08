@@ -27,6 +27,8 @@ class Weapon : public Sprite
  
     void update();
 
+    void use();
+
     const WeaponName getName();
 
     virtual ~Weapon() = default;

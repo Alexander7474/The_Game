@@ -13,6 +13,9 @@
 #include "../game/game.h"
 #include "gameCharacter.h"
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+
 std::string bodyStateToString(BodyState e) noexcept
 {
     switch (e)
@@ -126,6 +129,12 @@ void GameCharacter::update() {
           if(bState.first == BodyState::running)
             this->switchState(BodyState::idle);
           legs.setRotation(body.getRotation());
+        }else{
+          Mix_Chunk* s = Mix_LoadWAV("assets/sounds/walking.wav");
+          if (!Mix_Playing(0))
+          {
+            Mix_PlayChannel(0, s, 0);
+          }
         }
 
         // animation du personnage
@@ -160,6 +169,7 @@ void GameCharacter::update() {
         ImGui::Text("Health Point: %f", hp);
         ImGui::Text("Position: (%f, %f)", getPosition().x, getPosition().y);
         ImGui::Text("speed vector: (%f, %f)", speed.x, speed.y);
+        ImGui::Text("movement vector: (%f, %f)", movement.x, movement.y);
         ImGui::Text("speed: %f", abs(speed.x) + abs(speed.y));
         ImGui::Text("Looking point: (%f, %f)", lookingPoint.x, lookingPoint.y);
         ImGui::Text("Body Angle: %f", body.getRotation());
@@ -195,18 +205,20 @@ void GameCharacter::switchState(BodyState state){
             bState.first = BodyState::idle;
             lState = LegsState::idle;
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
+            Mix_HaltChannel(0);
             break;
           case BodyState::smoking:
             bState.first = BodyState::smoking;
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;
-          case BodyState::running:
+          case BodyState::running:{
             if(bState.first == BodyState::attacking || bState.first == BodyState::running)
               break;
             bState.first = BodyState::running;
             lState = LegsState::running;
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;
+            }
           case BodyState::attacking:{
             if(bState.first == BodyState::attacking)
               break;
@@ -219,12 +231,16 @@ void GameCharacter::switchState(BodyState state){
               }
               break;
             }
+            weapon->use();
             bState.first = BodyState::attacking;
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;}
-          case BodyState::dead:
+          case BodyState::dead:{
             bState = {BodyState::dead, WeaponName::fist};
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
+            Mix_Chunk* s = Mix_LoadWAV("assets/sounds/blood_split.wav");
+            Mix_PlayChannel(-1, s, 0);
+            }
             break;
           default:
             break;
