@@ -16,7 +16,7 @@ double DELTA_TIME = 0;
 double FPS = 0;
 double FPS_COUNTER = 0;
 double LAST_FPS_UPDATE = glfwGetTime();
-double GAME_SPEED = 1.0;
+double GAME_SPEED = 1;
 double ANIM_SPEED = 1.0/15.0;
 std::random_device rd;
 std::default_random_engine RANDOM_ENGINE(rd());
@@ -26,7 +26,7 @@ Game::Game()
 {
   dummy.setPosition(200,200);
   weapons.push_back(new Weapon(WeaponName::bate, "assets/weapons/bate.png"));
-  weapons.push_back(new Firearme());
+  weapons.push_back(new Firearme(WeaponName::gun, "assets/weapons/gun.png", this));
   weapons[0]->setPosition(200,150);
   weapons[1]->setPosition(200,100);
 }
@@ -51,6 +51,25 @@ void Game::update() {
             weapons.erase(w);
           }
         }
+        
+        for (auto b = bullets.begin(); b != bullets.end(); ) {
+          if((*b) != nullptr){
+            if((*b)->getPosition().x < 0
+                || (*b)->getPosition().y < 0
+                || (*b)->getPosition().x > BBOP_WINDOW_RESOLUTION.x
+                || (*b)->getPosition().y > BBOP_WINDOW_RESOLUTION.y
+                ){
+              bullets.erase(b);
+            }else{
+              if(dummy.getBody()->getCollisionBox().check((*b)->getCollisionBox()))
+                dummy.switchState(BodyState::dead);
+              (*b)->update();
+              b++;
+            }
+          }else{
+            bullets.erase(b);
+          }
+        }
 
         // TODO -- optimiser le drop des arme je sens que cette merde est mal foutu
         // TODO -- patcher le crash lors la suppression de point dans la liste d'arme
@@ -69,6 +88,7 @@ void Game::update() {
         if(dummy.getBody()->getCollisionBox().check(mainPlayer.getCharacter().getBody()->getCollisionBox()))
           ImGui::Text("Hit");
         ImGui::Text("Weapons vector size: %zu", weapons.size());
+        ImGui::Text("Bullets vector size: %zu", bullets.size());
         ImGui::End();
 #endif
 }
@@ -83,6 +103,12 @@ void Game::Draw() {
             bbopDebugCollisionBox(w->getCollisionBox(), scene);
           }
         }
+        for(auto &b : bullets){
+          if(b != nullptr){
+            scene.Draw(*b);
+            bbopDebugCollisionBox(b->getCollisionBox(), scene);
+          }
+        }
         scene.Draw(mainPlayer);
         bbopDebugCollisionBox(dummy.getBody()->getCollisionBox(), scene);
         bbopDebugCollisionBox(mainPlayer.getCharacter().getBody()->getCollisionBox(), scene);
@@ -92,4 +118,8 @@ void Game::Draw() {
 Camera *Game::getMainPlayerCam()
 {
   return &mainPlayerCam;
+}
+
+void Game::addBullet(Bullet *b){
+  bullets.push_back(b);
 }

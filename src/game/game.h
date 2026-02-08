@@ -9,6 +9,7 @@
 #include <vector>
 #include <BBOP/Graphics.h>
 
+// TODO -- Créer un getionnaire de ressource pour ne pas recharger plusieur fois des textures 
 // pointeur vers la fentre de jeu utilisable de partout
 extern GLFWwindow *gameWindow;
 
@@ -28,6 +29,7 @@ class Game {
         Player mainPlayer;
  
         std::vector<Weapon*> weapons;
+        std::vector<Bullet*> bullets;
         GameCharacter dummy;
       public:
         Game();
@@ -41,6 +43,8 @@ class Game {
          * @brief Dessine la game avec la scene
          */
         void Draw();
+
+        void addBullet(Bullet* b);
 
         //GETTER 
         Camera *getMainPlayerCam();

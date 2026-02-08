@@ -2,6 +2,12 @@
 
 #include <string>
 #include <BBOP/Graphics.h>
+#include <glm/vec2.hpp>
+
+#include "animation.h"
+#define BULLET_ANIM_ACCELERATION 2.0;
+
+class Game;
 
 enum class WeaponName {
   fist,
@@ -30,6 +36,33 @@ class Firearme : public Weapon
 {
   private:
     int ammo;
+    bool armed;
+    double firerate; //<! cadence de tire
+    double lastShot;
+
+    Game *game;
   public:
-    Firearme(WeaponName name = WeaponName::gun,  std::string texturePath = "assets/weapons/gun.png");
+    Firearme(WeaponName name = WeaponName::gun,  std::string texturePath = "assets/weapons/gun.png", Game *game = nullptr);
+
+    bool canFire();
+
+    /**
+     * @brief Fais tirer l'arme 
+     * 
+     * @param dir direction de la balle
+     */
+    void fire(glm::vec2 cible);
+};
+
+class Bullet : public Sprite
+{
+  private:
+    glm::vec2 dir;
+    float speed;
+    Animation animation;
+
+  public:
+    Bullet(std::string texturePath = "assets/weapons/bullet.png", glm::vec2 dir = {0,0}, glm::vec2 pos = {0,0});
+
+    void update();
 };

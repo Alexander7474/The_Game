@@ -30,7 +30,7 @@ GameCharacter::GameCharacter(std::string characterFolder)
   : legs("assets/default.png"),
     body("assets/default.png")
 {
-        acceleration = 1500.f;
+        acceleration = 2500.f;
         deceleration = 10.f;
 
         lookingPoint = glm::vec2(200,200);
@@ -207,12 +207,21 @@ void GameCharacter::switchState(BodyState state){
             lState = LegsState::running;
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;
-          case BodyState::attacking:
+          case BodyState::attacking:{
             if(bState.first == BodyState::attacking)
               break;
+            Firearme* a = dynamic_cast<Firearme*>(weapon);
+            if(a != nullptr){
+              if(a->canFire()){
+                a->fire(lookingPoint);
+                bState.first = BodyState::attacking;
+                bodyAnimations[bState].lastFrameTime = glfwGetTime();
+              }
+              break;
+            }
             bState.first = BodyState::attacking;
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
-            break;
+            break;}
           case BodyState::dead:
             bState = {BodyState::dead, WeaponName::fist};
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
@@ -261,7 +270,6 @@ bool GameCharacter::isPicking() {
         return pickupFlag;
 }
 
-// TODO -- L'echange d'arme entre game et character c'est du voodoo
 void GameCharacter::changeWeapon(Weapon*& newWeapon){
         if(glfwGetTime() - lastWeaponSwitch <= switchWeaponCooldown)
           return;
