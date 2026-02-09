@@ -4,8 +4,6 @@
     -> Super hotline  
     -> Hot somewhere
 
-    # Better-shoot-right
-
 ## Compile
 ```
 mkdir -p build
@@ -19,3 +17,7 @@ cmake --build . --parallel
 ```
 -DIMGUI_DEBUG
 ```
+
+## Format
+
+Utiliser format_code.sh pour formatter le code (utilisation du coding style du kernel linux)

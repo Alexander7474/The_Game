@@ -8,26 +8,27 @@
 
 class Game;
 
-class Player final : public BbopDrawable {
+class Player final : public BbopDrawable
+{
       private:
-        GameCharacter character;
+	GameCharacter character;
 
-        Crossair crossair;
+	Crossair crossair;
 
-        Game *game = nullptr; //<! Le player garde un pointer vers sa game
+	Game *game = nullptr; //<! Le player garde un pointer vers sa game
 
       public:
-        Player() = default;
+	Player() = default;
 
-        explicit Player(Game *game);
+	explicit Player(Game *game);
 
-        /**
-         * @brief Met a jour le player
-         */
-        void update();
+	/**
+   * @brief Met a jour le player
+   */
+	void update();
 
-        virtual void Draw(GLint *renderUniforms) const override;
+	virtual void Draw(GLint *renderUniforms) const override;
 
-        GameCharacter &getCharacter();
-        Crossair &getCrossair();
+	GameCharacter &getCharacter();
+	Crossair &getCrossair();
 };

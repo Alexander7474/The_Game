@@ -1,16 +1,16 @@
 #pragma once
 
-#include "player.h"
 #include "../engine/weapon.h"
+#include "player.h"
 
+#include <BBOP/Graphics.h>
 #include <GLFW/glfw3.h>
 #include <random>
 #include <string>
 #include <vector>
-#include <BBOP/Graphics.h>
 
-// TODO -- Créer un getionnaire de ressource pour ne pas recharger plusieur fois des textures 
-// pointeur vers la fentre de jeu utilisable de partout
+// TODO -- Créer un getionnaire de ressource pour ne pas recharger plusieur
+// fois des textures pointeur vers la fentre de jeu utilisable de partout
 extern GLFWwindow *gameWindow;
 
 // Variable global du moteur de jeu
@@ -23,32 +23,34 @@ extern double GAME_SPEED;
 extern double ANIM_SPEED;
 extern bool TOGGLE_MUSIC;
 
-class Game {
+class Game
+{
       private:
-        Scene scene;
-        Camera mainPlayerCam;
-        Player mainPlayer;
- 
-        std::vector<Weapon*> weapons;
-        std::vector<Bullet*> bullets;
-        std::vector<GameCharacter*> dummys;
+	Scene scene;
+	Camera mainPlayerCam;
+	Player mainPlayer;
 
-        int musicChannel = -1;
+	std::vector<Weapon *> weapons;
+	std::vector<Bullet *> bullets;
+	std::vector<GameCharacter *> dummys;
+
+	int musicChannel = -1;
+
       public:
-        Game();
+	Game();
 
-        /**
-         * @brief Met a jour la game
-         */
-        void update();
+	/**
+   * @brief Met a jour la game
+   */
+	void update();
 
-        /**
-         * @brief Dessine la game avec la scene
-         */
-        void Draw();
+	/**
+   * @brief Dessine la game avec la scene
+   */
+	void Draw();
 
-        void addBullet(Bullet* b);
+	void addBullet(Bullet *b);
 
-        //GETTER 
-        Camera *getMainPlayerCam();
+	// GETTER
+	Camera *getMainPlayerCam();
 };

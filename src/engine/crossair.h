@@ -2,14 +2,15 @@
 
 #include <BBOP/Graphics.h>
 
-class Crossair : public Geometric, public BbopDrawable {
+class Crossair : public Geometric, public BbopDrawable
+{
       private:
-        RectangleShape externRect[4];
-        RectangleShape middleRect;
+	RectangleShape externRect[4];
+	RectangleShape middleRect;
 
       public:
-        Crossair();
+	Crossair();
 
-        void setPosition(float x_, float y_) override;
-        void Draw(GLint *renderUniforms) const override;
+	void setPosition(float x_, float y_) override;
+	void Draw(GLint *renderUniforms) const override;
 };
