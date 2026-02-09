@@ -35,8 +35,8 @@ GameCharacter::GameCharacter(std::string characterFolder)
 {
         acceleration = 2500.f;
         deceleration = 10.f;
-
-        lookingPoint = glm::vec2(200,200);
+        lookingPoint = {0,0};
+        speed = {0,0};
 
         body.setSize(64,64);
         legs.setSize(64,64);
@@ -241,8 +241,8 @@ void GameCharacter::switchState(BodyState state){
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
             Mix_Chunk* s = Mix_LoadWAV("assets/sounds/blood_split.wav");
             Mix_PlayChannel(-1, s, 0);
-            }
             break;
+          }
           default:
             break;
         }
