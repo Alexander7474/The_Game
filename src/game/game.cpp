@@ -9,6 +9,8 @@
 #include <memory>
 #include <string>
 #include <BBOP/Graphics.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 GLFWwindow *gameWindow = nullptr;
 
@@ -25,8 +27,8 @@ Game::Game()
     : mainPlayer(this)
 {
   dummy.setPosition(200,200);
-  weapons.push_back(new Weapon(WeaponName::bate, "assets/weapons/bate.png"));
-  weapons.push_back(new Firearme(WeaponName::gun, "assets/weapons/gun.png", this));
+  weapons.push_back(new Bat());
+  weapons.push_back(new Gun(this));
   weapons[0]->setPosition(200,150);
   weapons[1]->setPosition(200,100);
 }

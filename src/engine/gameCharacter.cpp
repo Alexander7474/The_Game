@@ -9,12 +9,12 @@
 #include <cmath>
 #include <memory>
 #include <utility>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "../game/game.h"
 #include "gameCharacter.h"
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
+#include "ressourceManager.h"
 
 std::string bodyStateToString(BodyState e) noexcept
 {
@@ -48,7 +48,7 @@ GameCharacter::GameCharacter(std::string characterFolder)
         body.getCollisionBox().setOrigin(10,10);
         body.setAutoUpdateCollision(false);
 
-        weapon = new Weapon;
+        weapon = new Fist;
         switchWeaponCooldown = 0.2;
         lastWeaponSwitch = 0.0;
 
@@ -126,14 +126,16 @@ void GameCharacter::update() {
         legs.setRotation(angle);
 
         if(movement == glm::vec2(0,0)){
+          legs.setRotation(body.getRotation());
+          if(walkAudioCanal != -1){
+            Mix_HaltChannel(walkAudioCanal);
+            walkAudioCanal = -1;
+          }
           if(bState.first == BodyState::running)
             this->switchState(BodyState::idle);
-          legs.setRotation(body.getRotation());
         }else{
-          Mix_Chunk* s = Mix_LoadWAV("assets/sounds/walking.wav");
-          if (!Mix_Playing(0))
-          {
-            Mix_PlayChannel(0, s, 0);
+          if(walkAudioCanal == -1){
+            walkAudioCanal = Mix_PlayChannel(-1, RessourceManager::getSound("assets/sounds/walking.wav"), -1);
           }
         }
 
@@ -205,7 +207,6 @@ void GameCharacter::switchState(BodyState state){
             bState.first = BodyState::idle;
             lState = LegsState::idle;
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
-            Mix_HaltChannel(0);
             break;
           case BodyState::smoking:
             bState.first = BodyState::smoking;
@@ -303,7 +304,7 @@ Weapon* GameCharacter::dropWeapon() {
         if(weapon->getName() == WeaponName::fist)
           return nullptr;
         Weapon *tmp = weapon;
-        weapon = new Weapon();
+        weapon = new Fist();
         bState.second = weapon->getName();
         lastWeaponSwitch = glfwGetTime();
         return tmp;
