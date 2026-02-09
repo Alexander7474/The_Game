@@ -62,6 +62,9 @@ class GameCharacter : public BbopDrawable, public Geometric{
         // je n'en voit pas l'interet
         double switchWeaponCooldown;
         double lastWeaponSwitch;
+
+        // canal audio attribué 
+        int walkAudioCanal = -1;
       public:
         GameCharacter(std::string characterFolder = "player/");
 

@@ -14,13 +14,14 @@
 extern GLFWwindow *gameWindow;
 
 // Variable global du moteur de jeu
+extern std::default_random_engine RANDOM_ENGINE;
 extern double DELTA_TIME;
 extern double FPS;
 extern double FPS_COUNTER;
 extern double LAST_FPS_UPDATE;
 extern double GAME_SPEED;
 extern double ANIM_SPEED;
-extern std::default_random_engine RANDOM_ENGINE;
+extern bool TOGGLE_MUSIC;
 
 class Game {
       private:
@@ -30,7 +31,9 @@ class Game {
  
         std::vector<Weapon*> weapons;
         std::vector<Bullet*> bullets;
-        GameCharacter dummy;
+        std::vector<GameCharacter*> dummys;
+
+        int musicChannel = -1;
       public:
         Game();
 

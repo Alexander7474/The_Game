@@ -9,9 +9,12 @@
 #include <cmath>
 #include <memory>
 #include <utility>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "../game/game.h"
 #include "gameCharacter.h"
+#include "ressourceManager.h"
 
 std::string bodyStateToString(BodyState e) noexcept
 {
@@ -32,8 +35,8 @@ GameCharacter::GameCharacter(std::string characterFolder)
 {
         acceleration = 2500.f;
         deceleration = 10.f;
-
-        lookingPoint = glm::vec2(200,200);
+        lookingPoint = {0,0};
+        speed = {0,0};
 
         body.setSize(64,64);
         legs.setSize(64,64);
@@ -45,7 +48,7 @@ GameCharacter::GameCharacter(std::string characterFolder)
         body.getCollisionBox().setOrigin(10,10);
         body.setAutoUpdateCollision(false);
 
-        weapon = new Weapon;
+        weapon = new Fist;
         switchWeaponCooldown = 0.2;
         lastWeaponSwitch = 0.0;
 
@@ -123,9 +126,17 @@ void GameCharacter::update() {
         legs.setRotation(angle);
 
         if(movement == glm::vec2(0,0)){
+          legs.setRotation(body.getRotation());
+          if(walkAudioCanal != -1){
+            Mix_HaltChannel(walkAudioCanal);
+            walkAudioCanal = -1;
+          }
           if(bState.first == BodyState::running)
             this->switchState(BodyState::idle);
-          legs.setRotation(body.getRotation());
+        }else{
+          if(walkAudioCanal == -1){
+            walkAudioCanal = Mix_PlayChannel(-1, RessourceManager::getSound("assets/sounds/walking.wav"), -1);
+          }
         }
 
         // animation du personnage
@@ -160,6 +171,7 @@ void GameCharacter::update() {
         ImGui::Text("Health Point: %f", hp);
         ImGui::Text("Position: (%f, %f)", getPosition().x, getPosition().y);
         ImGui::Text("speed vector: (%f, %f)", speed.x, speed.y);
+        ImGui::Text("movement vector: (%f, %f)", movement.x, movement.y);
         ImGui::Text("speed: %f", abs(speed.x) + abs(speed.y));
         ImGui::Text("Looking point: (%f, %f)", lookingPoint.x, lookingPoint.y);
         ImGui::Text("Body Angle: %f", body.getRotation());
@@ -200,13 +212,14 @@ void GameCharacter::switchState(BodyState state){
             bState.first = BodyState::smoking;
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;
-          case BodyState::running:
+          case BodyState::running:{
             if(bState.first == BodyState::attacking || bState.first == BodyState::running)
               break;
             bState.first = BodyState::running;
             lState = LegsState::running;
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;
+            }
           case BodyState::attacking:{
             if(bState.first == BodyState::attacking)
               break;
@@ -219,13 +232,17 @@ void GameCharacter::switchState(BodyState state){
               }
               break;
             }
+            weapon->use();
             bState.first = BodyState::attacking;
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
             break;}
-          case BodyState::dead:
+          case BodyState::dead:{
             bState = {BodyState::dead, WeaponName::fist};
             bodyAnimations[bState].lastFrameTime = glfwGetTime();
+            Mix_Chunk* s = Mix_LoadWAV("assets/sounds/blood_split.wav");
+            Mix_PlayChannel(-1, s, 0);
             break;
+          }
           default:
             break;
         }
@@ -287,7 +304,7 @@ Weapon* GameCharacter::dropWeapon() {
         if(weapon->getName() == WeaponName::fist)
           return nullptr;
         Weapon *tmp = weapon;
-        weapon = new Weapon();
+        weapon = new Fist();
         bState.second = weapon->getName();
         lastWeaponSwitch = glfwGetTime();
         return tmp;

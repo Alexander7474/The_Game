@@ -1,5 +1,6 @@
 #include "weapon.h"
 #include "../game/game.h"
+#include "ressourceManager.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
@@ -17,7 +18,7 @@ std::string weaponNameToString(WeaponName e) noexcept
     }
 }
 
-Weapon::Weapon(WeaponName name, std::string texturePath)
+Weapon::Weapon(WeaponName name, std::string texturePath, std::string soundPath)
   : Sprite(texturePath.c_str())
 {
   this->name = name;
@@ -26,10 +27,15 @@ Weapon::Weapon(WeaponName name, std::string texturePath)
   getCollisionBox().setSize(32,32);
   getCollisionBox().setOrigin(16,16);
   setAutoUpdateCollision(false);
+  sound = RessourceManager::getSound(soundPath);
 }
 
 void Weapon::update(){
   shapeCollisionBox.setPosition(getPosition());
+}
+
+void Weapon::use(){
+  Mix_PlayChannel(-1, sound, 0);
 }
 
 const WeaponName Weapon::getName()
@@ -37,8 +43,8 @@ const WeaponName Weapon::getName()
   return name;
 }
 
-Firearme::Firearme(WeaponName name, std::string texturePath, Game* game)
-  : Weapon(name, texturePath)
+Firearme::Firearme(WeaponName name, std::string texturePath, std::string soundPath, Game* game)
+  : Weapon(name, texturePath, soundPath)
 {
   armed = true;
   ammo = 15;
@@ -65,8 +71,7 @@ void Firearme::fire(glm::vec2 cible)
   Bullet* b = new Bullet("assets/weapons/bullet2.png", dir, pos);
   game->addBullet(b);
 
-  Mix_Chunk* gunSound = Mix_LoadWAV("assets/sounds/gun.wav");
-  Mix_PlayChannel(-1, gunSound, 0);
+  this->use();
   
   lastShot = glfwGetTime();
 }
@@ -106,3 +111,16 @@ void Bullet::update()
     setTexture(animation.textures[animation.frame]);
   
 }
+
+Fist::Fist()
+  : Weapon(WeaponName::fist, "assets/default.png", "assets/sounds/punch1.wav")
+{}
+
+// TODO -- fix typo bate -> bat
+Bat::Bat()
+  : Weapon(WeaponName::bate, "assets/weapons/bat.png", "assets/sounds/punch0.wav")
+{}
+
+Gun::Gun(Game *game)
+  : Firearme(WeaponName::gun, "assets/weapons/gun.png", "assets/sounds/gun.wav", game)
+{}

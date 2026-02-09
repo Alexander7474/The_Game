@@ -14,6 +14,7 @@
 #include "engine/macro.h"
 #include "engine/keys.h"
 #include "game/game.h"
+#include "engine/ressourceManager.h"
 
 using namespace std;
 
@@ -21,11 +22,12 @@ int main() {
         // Initialisation BBOP
         bbopInit(1920, 1080, "The game", gameWindow);
         bbopChangeWindowResolution(640, 360);
-        //masquer la souris
+        
         glfwSetInputMode(gameWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         glfwSetMouseButtonCallback(gameWindow, mouse_button_callback);
         glfwSetKeyCallback(gameWindow, key_callback);
-        glfwSwapInterval(1);
+        glfwSwapInterval(0);
+
         // affichage des logs bbop
         for (string &s : LOGS) {
                 cout << s << endl;
@@ -43,6 +45,7 @@ int main() {
                 SDL_Quit();
                 exit(1);
         }
+        Mix_AllocateChannels(64); 
 
 #ifdef IMGUI_DEBUG
         // Initialisation de IMGUI pour debug
@@ -62,6 +65,7 @@ int main() {
 #endif
 
         // Initialisation du jeu
+        RessourceManager::loadAll();
         Game game;
 
         // main while loop
