@@ -21,6 +21,8 @@ void RessourceManager::loadAll(std::string racinePath)
 				  << "' non reconnue pour " << file << '\n';
 		}
 	}
+  textures["default"] = new Texture("assets/default.png");
+  sounds["default"] = Mix_LoadWAV("assets/default.wav");
 }
 
 Texture *RessourceManager::getTexture(std::string name)

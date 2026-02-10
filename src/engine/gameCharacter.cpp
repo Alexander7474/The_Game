@@ -35,7 +35,7 @@ std::string bodyStateToString(BodyState e) noexcept
 }
 
 GameCharacter::GameCharacter(std::string characterFolder)
-    : legs("assets/default.png"), body("assets/default.png")
+    : legs(*RessourceManager::getTexture()), body(*RessourceManager::getTexture())
 {
 	acceleration = 2500.f;
 	deceleration = 10.f;

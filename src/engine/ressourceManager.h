@@ -31,12 +31,12 @@ class RessourceManager
    *
    * @param nom de la texture
    */
-	static Texture *getTexture(std::string name = "");
+	static Texture *getTexture(std::string name = "default");
 
 	/**
    * @brief Renvoie un son
    *
    * @param nom du son
    */
-	static Mix_Chunk *getSound(std::string name = "");
+	static Mix_Chunk *getSound(std::string name = "default");
 };

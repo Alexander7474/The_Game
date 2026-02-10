@@ -24,7 +24,7 @@ std::string weaponNameToString(WeaponName e) noexcept
 }
 
 Weapon::Weapon(WeaponName name, std::string texturePath, std::string soundPath)
-    : Sprite(texturePath.c_str())
+    : Sprite(*RessourceManager::getTexture(texturePath))
 {
 	this->name = name;
 	setSize(64, 64);
@@ -73,7 +73,7 @@ void Firearme::fire(glm::vec2 cible)
 }
 
 Bullet::Bullet(std::string texturePath, glm::vec2 dir, glm::vec2 pos)
-    : Sprite("assets/default.png")
+    : Sprite(*RessourceManager::getTexture(texturePath))
 {
 	this->dir = glm::normalize(dir);
 	float angle = atan2(dir.y, dir.x);
