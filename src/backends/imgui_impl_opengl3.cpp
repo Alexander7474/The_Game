@@ -191,20 +191,21 @@
 	"-Wsign-conversion" // warning: implicit conversion changes signedness
 #pragma clang diagnostic ignored "-Wunused-macros" // warning: macro is not used
 #pragma clang diagnostic ignored "-Wnonportable-system-include-path"
-#pragma clang diagnostic ignored                                                    \
+#pragma clang diagnostic ignored                                               \
 	"-Wcast-function-type" // warning: cast between incompatible function types \
 			       // (for loader)
 #endif
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpragmas" // warning: unknown option after    \
+#pragma GCC diagnostic ignored                                                 \
+	"-Wpragmas" // warning: unknown option after    \
 					   // '#pragma GCC diagnostic' kind
 #pragma GCC diagnostic ignored                                                 \
 	"-Wunknown-warning-option" // warning: unknown warning group 'xxx'
-#pragma GCC diagnostic ignored                                                      \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wcast-function-type" // warning: cast between incompatible function types \
 			       // (for loader)
-#pragma GCC diagnostic ignored                                                  \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wstrict-overflow" // warning: assuming signed overflow does not occur \
 	// when simplifying Diviseursion / ..when changing X +-                 \
 	// C1 cmp C2 to X cmp C2 -+ C1
@@ -477,14 +478,14 @@ bool ImGui_ImplOpenGL3_Init(const char *glsl_version)
 	if (bd->GlVersion >= 320)
 		io.BackendFlags |=
 			ImGuiBackendFlags_RendererHasVtxOffset; // We can honor the
-			// ImDrawCmd::VtxOffset
-			// field, allowing for large
-			// meshes.
+		// ImDrawCmd::VtxOffset
+		// field, allowing for large
+		// meshes.
 #endif
 	io.BackendFlags |=
 		ImGuiBackendFlags_RendererHasTextures; // We can honor
-		// ImGuiPlatformIO::Textures[]
-		// requests during render.
+	// ImGuiPlatformIO::Textures[]
+	// requests during render.
 
 	ImGuiPlatformIO &platform_io = ImGui::GetPlatformIO();
 	platform_io.Renderer_TextureMaxWidth =
@@ -633,7 +634,7 @@ static void ImGui_ImplOpenGL3_SetupRenderState(ImDrawData *draw_data,
 	if (bd->GlVersion >= 330 || bd->GlProfileIsES3)
 		glBindSampler(0,
 			0); // We use combined texture/sampler state. Applications
-			// using GL 3.3 and GL ES 3.0 may set that otherwise.
+		// using GL 3.3 and GL ES 3.0 may set that otherwise.
 #endif
 
 	(void)vertex_array_object;
@@ -775,7 +776,7 @@ void ImGui_ImplOpenGL3_RenderDrawData(ImDrawData *draw_data)
 	ImVec2 clip_scale =
 		draw_data
 			->FramebufferScale; // (1,1) unless using retina display which
-					    // are often (2,2)
+		// are often (2,2)
 
 	// Render command lists
 	for (int n = 0; n < draw_data->CmdListsCount; n++) {

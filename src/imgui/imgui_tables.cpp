@@ -298,7 +298,7 @@ Index of this file:
 #pragma warning(disable : 5054)		  // operator '|': deprecated between  \
 					  // enumerations of different types
 #endif
-#pragma warning(                                                                   \
+#pragma warning(                                                               \
 	disable : 26451) // [Static Analyzer] Arithmetic overflow : Using operator \
 	// 'xxx' on a 4 byte value and then casting the result to                  \
 	// a 8 byte value. Cast the value to the wider type before                 \
@@ -311,7 +311,7 @@ Index of this file:
 // Clang/GCC warnings with -Weverything
 #if defined(__clang__)
 #if __has_warning("-Wunknown-warning-option")
-#pragma clang diagnostic ignored                                                  \
+#pragma clang diagnostic ignored                                               \
 	"-Wunknown-warning-option" // warning: unknown warning group 'xxx' // not \
 	// all warnings are known by all Clang versions                           \
 	// and they tend to be rename-happy.. so                                  \
@@ -320,24 +320,24 @@ Index of this file:
 #endif
 #pragma clang diagnostic ignored                                               \
 	"-Wunknown-pragmas" // warning: unknown warning group 'xxx'
-#pragma clang diagnostic ignored                                                   \
+#pragma clang diagnostic ignored                                               \
 	"-Wold-style-cast" // warning: use of old-style cast // yes, they are more \
 			   // terse.
 #pragma clang diagnostic ignored                                               \
 	"-Wfloat-equal" // warning: comparing floating point with == or != is  \
 	// unsafe // storing and comparing against same constants              \
 	// (typically 0.0f) is ok.
-#pragma clang diagnostic ignored                                                \
+#pragma clang diagnostic ignored                                               \
 	"-Wformat" // warning: format specifies type 'int' but the argument has \
 		   // type 'unsigned int'
-#pragma clang diagnostic ignored                                                   \
+#pragma clang diagnostic ignored                                               \
 	"-Wformat-nonliteral" // warning: format string is not a string literal // \
 			      // passing non-literal to vsnformat(). yes, user     \
 	// passing incorrect format strings can crash the                          \
 	// code.
 #pragma clang diagnostic ignored                                               \
 	"-Wsign-conversion" // warning: implicit conversion changes signedness
-#pragma clang diagnostic ignored                                                    \
+#pragma clang diagnostic ignored                                               \
 	"-Wzero-as-null-pointer-constant" // warning: zero as null pointer constant \
 	// // some standard header variations use                                   \
 	// #define NULL 0
@@ -346,11 +346,11 @@ Index of this file:
 			     // 'double' when passing argument to function  // \
 	// using printf() is a misery with this as C++ va_arg                  \
 	// ellipsis changes float to double.
-#pragma clang diagnostic ignored                                                 \
+#pragma clang diagnostic ignored                                               \
 	"-Wenum-enum-conversion" // warning: bitwise operation between different \
 				 // enumeration types ('XXXFlags_' and           \
 				 // 'XXXFlagsPrivate_')
-#pragma clang diagnostic ignored                                                  \
+#pragma clang diagnostic ignored                                               \
 	"-Wdeprecated-enum-enum-conversion" // warning: bitwise operation between \
 					    // different enumeration types        \
 	// ('XXXFlags_' and 'XXXFlagsPrivate_')                                   \
@@ -358,18 +358,19 @@ Index of this file:
 #pragma clang diagnostic ignored                                               \
 	"-Wimplicit-int-float-conversion" // warning: implicit conversion from \
 					  // 'xxx' to 'float' may lose precision
-#pragma clang diagnostic ignored                                                \
+#pragma clang diagnostic ignored                                               \
 	"-Wunsafe-buffer-usage" // warning: 'xxx' is an unsafe pointer used for \
 				// buffer access
-#pragma clang diagnostic ignored                                                   \
+#pragma clang diagnostic ignored                                               \
 	"-Wnontrivial-memaccess" // warning: first argument in call to 'memset' is \
 				 // a pointer to non-trivially copyable type
 #pragma clang diagnostic ignored                                               \
 	"-Wswitch-default" // warning: 'switch' missing 'default' label
 #elif defined(__GNUC__)
-#pragma GCC diagnostic ignored "-Wpragmas" // warning: unknown option after    \
+#pragma GCC diagnostic ignored                                                 \
+	"-Wpragmas" // warning: unknown option after    \
 					   // '#pragma GCC diagnostic' kind
-#pragma GCC diagnostic ignored                                                    \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wfloat-equal" // warning: comparing floating-point with '==' or '!=' is \
 			// unsafe
 #pragma GCC diagnostic ignored                                                 \
@@ -378,7 +379,7 @@ Index of this file:
 #pragma GCC diagnostic ignored                                                 \
 	"-Wdouble-promotion" // warning: implicit conversion from 'float' to   \
 			     // 'double' when passing argument to function
-#pragma GCC diagnostic ignored                                                     \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wformat" // warning: format '%p' expects argument of type 'int'/'void*', \
 		   // but argument X has type 'unsigned int'/'ImGuiWindow*'
 #pragma GCC diagnostic ignored "-Wstrict-overflow"
@@ -419,7 +420,7 @@ static const float TABLE_RESIZE_SEPARATOR_HALF_THICKNESS =
 	4.0f; // Extend outside inner borders.
 static const float TABLE_RESIZE_SEPARATOR_FEEDBACK_TIMER =
 	0.06f; // Delay/timer before making the hover feedback (color+cursor)
-	       // visible because tables/columns tends to be more cramped.
+	// visible because tables/columns tends to be more cramped.
 
 // Helper
 inline ImGuiTableFlags TableFixFlags(
@@ -678,7 +679,7 @@ bool ImGui::BeginTableEx(const char *name, ImGuiID id, int columns_count,
 		table->HasScrollbarYPrev = table->HasScrollbarYCurr = false;
 		table->InnerWindow->DC
 			.TreeDepth++; // This is designed to always linking
-			// ImGuiTreeNodeFlags_DrawLines linking accross a table
+		// ImGuiTreeNodeFlags_DrawLines linking accross a table
 	}
 
 	// Push a standardized ID for both child-using and not-child-using tables
@@ -686,7 +687,7 @@ bool ImGui::BeginTableEx(const char *name, ImGuiID id, int columns_count,
 	if (instance_no > 0)
 		PushOverrideID(
 			instance_id); // FIXME: Somehow this is not resolved by stack-tool,
-			// even tho GetIDWithSeed() submitted the symbol.
+	// even tho GetIDWithSeed() submitted the symbol.
 
 	// Backup a copy of host window members we will modify
 	ImGuiWindow *inner_window = table->InnerWindow;
@@ -871,8 +872,8 @@ bool ImGui::BeginTableEx(const char *name, ImGuiID id, int columns_count,
 				column->WidthAuto = width_auto;
 				column->IsPreserveWidthAuto =
 					true; // Preserve WidthAuto when reinitializing a live
-					// table: not technically necessary but remove a
-					// visible flicker
+				// table: not technically necessary but remove a
+				// visible flicker
 				column->IsEnabled = column->IsUserEnabled =
 					column->IsUserEnabledNextFrame = true;
 			}
@@ -2182,8 +2183,8 @@ void ImGui::EndTable()
 		// visibility/sizes to generally save a frame of feedback.
 		const float inner_content_max_x = table->OuterRect.Min.x +
 			table->ColumnsAutoFitWidth; // Slightly misleading name but used
-						    // for code symmetry with
-						    // inner_content_max_y
+			// for code symmetry with
+			// inner_content_max_y
 		const float decoration_size =
 			table->TempData->AngledHeadersExtraWidth +
 			((table->Flags & ImGuiTableFlags_ScrollY)
@@ -2686,10 +2687,10 @@ void ImGui::TableBeginRow(ImGuiTable *table)
 	window->DC.CursorPosPrevLine = ImVec2(window->DC.CursorPos.x,
 		window->DC.CursorPos.y +
 			table->RowCellPaddingY); // This allows users to call SameLine() to
-		// share LineSize between columns.
+	// share LineSize between columns.
 	window->DC.PrevLineSize = window->DC.CurrLineSize = ImVec2(0.0f,
 		0.0f); // This allows users to call SameLine() to share LineSize
-		       // between columns, and to call it from first column too.
+		// between columns, and to call it from first column too.
 	window->DC.IsSameLine = window->DC.IsSetPos = false;
 	window->DC.CursorMaxPos.y = next_y1;
 
@@ -2821,7 +2822,7 @@ void ImGui::TableEndRow(ImGuiTable *table)
 				cell_bg_rect.Min.x = ImMax(cell_bg_rect.Min.x,
 					column->ClipRect.Min
 						.x); // So that first column after frozen
-					// one gets clipped when scrolling
+				// one gets clipped when scrolling
 				cell_bg_rect.Max.x =
 					ImMin(cell_bg_rect.Max.x, column->MaxX);
 				if (cell_bg_rect.Min.y < cell_bg_rect.Max.y)
@@ -2997,8 +2998,8 @@ void ImGui::TableBeginCell(ImGuiTable *table, int column_n)
 	if (column->Flags & ImGuiTableColumnFlags_IndentEnable)
 		start_x +=
 			table->RowIndentOffsetX; // ~~ += window.DC.Indent.x -
-			// table->HostIndentX, except we locked
-			// it for the row.
+	// table->HostIndentX, except we locked
+	// it for the row.
 
 	window->DC.CursorPos.x = start_x;
 	window->DC.CursorPos.y = table->RowPosY1 + table->RowCellPaddingY;
@@ -3059,8 +3060,8 @@ void ImGui::TableEndCell(ImGuiTable *table)
 	if (table->RowFlags & ImGuiTableRowFlags_Headers)
 		p_max_pos_x =
 			&column->ContentMaxXHeadersUsed; // Useful in case user submit
-			// contents in header row that is
-			// not a TableHeader() call
+	// contents in header row that is
+	// not a TableHeader() call
 	else
 		p_max_pos_x = table->IsUnfrozenRows
 			? &column->ContentMaxXUnfrozen
@@ -3176,7 +3177,7 @@ void ImGui::TableSetColumnWidth(int column_n, float width)
 	const float min_width = table->MinColumnWidth;
 	const float max_width = ImMax(min_width,
 		column_0->WidthMax); // Don't use TableCalcMaxColumnWidth() here as it
-		// would rely on MinX from last instance (#7933)
+	// would rely on MinX from last instance (#7933)
 	column_0_width = ImClamp(column_0_width, min_width, max_width);
 	if (column_0->WidthGiven == column_0_width ||
 		column_0->WidthRequest == column_0_width)
@@ -3606,11 +3607,11 @@ void ImGui::TableMergeDrawChannels(ImGuiTable *table)
 					content_max_x = ImMax(
 						column->ContentMaxXFrozen,
 						column->ContentMaxXHeadersUsed); // Row freeze: use width
-						// before freeze
+				// before freeze
 				else
 					content_max_x =
 						column->ContentMaxXUnfrozen; // Row freeze: use width
-						// after freeze
+				// after freeze
 				if (content_max_x > column->ClipRect.Max.x)
 					continue;
 			}
@@ -4727,7 +4728,7 @@ void ImGui::TableAngledHeadersRowEx(ImGuiID row_id, float angle,
 						label_name, label_name_eol);
 					float clip_width = max_label_width -
 						padding.y; // Using padding.y*2.0f would be
-						// symmetrical but hide more text.
+					// symmetrical but hide more text.
 					float clip_height = ImMin(label_size.y,
 						column->ClipRect.Max.x -
 							column->WorkMinX -
@@ -4833,7 +4834,7 @@ void ImGui::TableOpenContextMenu(int column_n)
 			    // use this one (for consistency)
 		column_n = table->CurrentColumn;
 	if (column_n == table->ColumnsCount) // To facilitate using with
-					     // TableGetHoveredColumn()
+		// TableGetHoveredColumn()
 		column_n = -1;
 	IM_ASSERT(column_n >= -1 && column_n < table->ColumnsCount);
 	if (table->Flags &
@@ -4914,7 +4915,7 @@ void ImGui::TableDrawDefaultContextMenu(
 		else
 			size_all_desc = LocalizeGetMsg(
 				ImGuiLocKey_TableSizeAllDefault); // "###SizeAll" All
-				// stretch or mixed
+		// stretch or mixed
 		if (MenuItem(size_all_desc, NULL))
 			TableSetColumnWidthAutoAll(table);
 		want_separator = true;

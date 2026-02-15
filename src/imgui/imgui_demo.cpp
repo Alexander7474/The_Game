@@ -174,7 +174,8 @@ ShowExampleAppCustomRendering()
 #pragma warning(                                                               \
 	disable : 4996) // 'This function or variable may be unsafe': strcpy,  \
 			// strdup, sprintf, vsnprintf, sscanf, fopen
-#pragma warning(disable : 26451) // [Static Analyzer] Arithmetic overflow :    \
+#pragma warning(                                                               \
+	disable : 26451) // [Static Analyzer] Arithmetic overflow :    \
 				 // Using operator 'xxx' on a 4 byte value and \
 	// then casting the result to an 8 byte value.                         \
 	// Cast the value to the wider type before                             \
@@ -185,7 +186,7 @@ ShowExampleAppCustomRendering()
 // Clang/GCC warnings with -Weverything
 #if defined(__clang__)
 #if __has_warning("-Wunknown-warning-option")
-#pragma clang diagnostic ignored                                                  \
+#pragma clang diagnostic ignored                                               \
 	"-Wunknown-warning-option" // warning: unknown warning group 'xxx' // not \
 	// all warnings are known by all Clang versions                           \
 	// and they tend to be rename-happy.. so                                  \
@@ -194,22 +195,22 @@ ShowExampleAppCustomRendering()
 #endif
 #pragma clang diagnostic ignored                                               \
 	"-Wunknown-pragmas" // warning: unknown warning group 'xxx'
-#pragma clang diagnostic ignored                                                   \
+#pragma clang diagnostic ignored                                               \
 	"-Wold-style-cast" // warning: use of old-style cast // yes, they are more \
 			   // terse.
-#pragma clang diagnostic ignored                                                   \
+#pragma clang diagnostic ignored                                               \
 	"-Wdeprecated-declarations" // warning: 'xx' is deprecated: The POSIX name \
 	// for this..   // for strdup used in demo code                            \
 	// (so user can copy & paste the code)
 #pragma clang diagnostic ignored                                               \
 	"-Wint-to-void-pointer-cast" // warning: cast to 'void *' from smaller \
 				     // integer type
-#pragma clang diagnostic ignored                                                \
+#pragma clang diagnostic ignored                                               \
 	"-Wformat" // warning: format specifies type 'int' but the argument has \
 		   // type 'unsigned int'
 #pragma clang diagnostic ignored                                               \
 	"-Wformat-security" // warning: format string is not a string literal
-#pragma clang diagnostic ignored                                                \
+#pragma clang diagnostic ignored                                               \
 	"-Wexit-time-destructors" // warning: declaration requires an exit-time \
 	// destructor    // exit-time destruction order                         \
 	// is undefined. if MemFree() leads to users code                       \
@@ -220,7 +221,7 @@ ShowExampleAppCustomRendering()
 	"-Wunused-macros" // warning: macro is not used // we define           \
 	// snprintf/vsnprintf on Windows so they are available,                \
 	// but not always used.
-#pragma clang diagnostic ignored                                                    \
+#pragma clang diagnostic ignored                                               \
 	"-Wzero-as-null-pointer-constant" // warning: zero as null pointer constant \
 	// // some standard header variations use                                   \
 	// #define NULL 0
@@ -234,21 +235,22 @@ ShowExampleAppCustomRendering()
 #pragma clang diagnostic ignored                                               \
 	"-Wimplicit-int-float-conversion" // warning: implicit conversion from \
 					  // 'xxx' to 'float' may lose precision
-#pragma clang diagnostic ignored                                                \
+#pragma clang diagnostic ignored                                               \
 	"-Wunsafe-buffer-usage" // warning: 'xxx' is an unsafe pointer used for \
 				// buffer access
 #pragma clang diagnostic ignored                                               \
 	"-Wswitch-default" // warning: 'switch' missing 'default' label
 #elif defined(__GNUC__)
-#pragma GCC diagnostic ignored "-Wpragmas" // warning: unknown option after    \
+#pragma GCC diagnostic ignored                                                 \
+	"-Wpragmas" // warning: unknown option after    \
 					   // '#pragma GCC diagnostic' kind
-#pragma GCC diagnostic ignored                                                    \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wfloat-equal" // warning: comparing floating-point with '==' or '!=' is \
 			// unsafe
 #pragma GCC diagnostic ignored                                                 \
 	"-Wint-to-pointer-cast" // warning: cast to pointer from integer of    \
 				// different size
-#pragma GCC diagnostic ignored                                                     \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wformat" // warning: format '%p' expects argument of type 'int'/'void*', \
 		   // but argument X has type 'unsigned int'/'ImGuiWindow*'
 #pragma GCC diagnostic ignored                                                 \
@@ -257,18 +259,18 @@ ShowExampleAppCustomRendering()
 #pragma GCC diagnostic ignored                                                 \
 	"-Wdouble-promotion" // warning: implicit conversion from 'float' to   \
 			     // 'double' when passing argument to function
-#pragma GCC diagnostic ignored                                                    \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wconversion" // warning: conversion to 'xxxx' from 'xxxx' may alter its \
 		       // value
-#pragma GCC diagnostic ignored                                                  \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wmisleading-indentation" // [__GNUC__ >= 6] warning: this 'if' clause \
 				   // does not guard this statement      //     \
 				   // GCC 6.0+ only. See #883 on GitHub.
-#pragma GCC diagnostic ignored                                                  \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wstrict-overflow" // warning: assuming signed overflow does not occur \
 	// when simplifying Diviseursion / ..when changing X +-                 \
 	// C1 cmp C2 to X cmp C2 -+ C1
-#pragma GCC diagnostic ignored                                                   \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wcast-qual" // warning: cast from type 'const xxxx *' to type 'xxxx *' \
 		      // casts away qualifiers
 #endif
@@ -3273,7 +3275,7 @@ static void DemoWindowWidgetsQueryingStatuses()
 			ImGui::Begin(
 				"Title bar Hovered/Active tests", &test_window);
 			if (ImGui::BeginPopupContextItem()) // <-- This is using
-							    // IsItemHovered()
+			// IsItemHovered()
 			{
 				if (ImGui::MenuItem("Close")) {
 					test_window = false;
@@ -3519,9 +3521,9 @@ struct ExampleSelectionWithDeletion : ImGuiSelectionBasicStorage {
 		{
 			ms_io->RangeSrcReset =
 				true; // Request to recover RangeSrc from NavId next frame. Would
-				// be ok to reset even when NavIdSelected==true, but it
-				// would take an extra frame to recover RangeSrc when
-				// deleting a selected item.
+			// be ok to reset even when NavIdSelected==true, but it
+			// would take an extra frame to recover RangeSrc when
+			// deleting a selected item.
 			return focused_idx; // Request to focus same item after deletion.
 		}
 
@@ -3598,7 +3600,7 @@ struct ExampleDualListBox {
 			Items[src].erase(
 				&Items[src]
 				      [src_n]); // FIXME-OPT: Could be implemented more
-				// optimally (rebuild src items and swap)
+			// optimally (rebuild src items and swap)
 			Items[dst].push_back(item_id);
 			src_n--;
 		}
@@ -3916,7 +3918,7 @@ static void DemoWindowWidgetsSelectionAndMultiSelect(
 					clipper.IncludeItemByIndex(
 						(int)ms_io
 							->RangeSrcItem); // Ensure RangeSrc item is not
-						// clipped.
+				// clipped.
 				while (clipper.Step()) {
 					for (int n = clipper.DisplayStart;
 						n < clipper.DisplayEnd; n++) {
@@ -4109,7 +4111,7 @@ static void DemoWindowWidgetsSelectionAndMultiSelect(
 					clipper.IncludeItemByIndex(
 						(int)ms_io
 							->RangeSrcItem); // Ensure RangeSrc item is not
-						// clipped.
+				// clipped.
 				while (clipper.Step()) {
 					for (int n = clipper.DisplayStart;
 						n < clipper.DisplayEnd; n++) {
@@ -4171,9 +4173,9 @@ static void DemoWindowWidgetsSelectionAndMultiSelect(
 			ImGui::CheckboxFlags(
 				"ImGuiMultiSelectFlags_BoxSelect2d", &flags,
 				ImGuiMultiSelectFlags_BoxSelect2d); // Cannot use
-				// ImGuiMultiSelectFlags_BoxSelect1d
-				// as checkboxes are varying
-				// width.
+			// ImGuiMultiSelectFlags_BoxSelect1d
+			// as checkboxes are varying
+			// width.
 
 			if (ImGui::BeginChild("##Basket",
 				    ImVec2(-FLT_MIN, ImGui::GetFontSize() * 20),
@@ -4222,7 +4224,7 @@ static void DemoWindowWidgetsSelectionAndMultiSelect(
 			static ImGuiMultiSelectFlags flags =
 				ImGuiMultiSelectFlags_ScopeRect |
 				ImGuiMultiSelectFlags_ClearOnEscape; // |
-				// ImGuiMultiSelectFlags_ClearOnClickVoid;
+			// ImGuiMultiSelectFlags_ClearOnClickVoid;
 			if (ImGui::CheckboxFlags(
 				    "ImGuiMultiSelectFlags_ScopeWindow", &flags,
 				    ImGuiMultiSelectFlags_ScopeWindow) &&
@@ -4325,9 +4327,9 @@ static void DemoWindowWidgetsSelectionAndMultiSelect(
 						ImGuiTreeNodeFlags_OpenOnDoubleClick;
 					tree_node_flags |=
 						ImGuiTreeNodeFlags_NavLeftJumpsToParent; // Enable
-						// pressing left
-						// to jump to
-						// parent
+					// pressing left
+					// to jump to
+					// parent
 					if (node->Childs.Size == 0)
 						tree_node_flags |=
 							ImGuiTreeNodeFlags_Bullet |
@@ -4773,12 +4775,12 @@ static void DemoWindowWidgetsSelectionAndMultiSelect(
 					if (item_curr_idx_to_focus != -1)
 						clipper.IncludeItemByIndex(
 							item_curr_idx_to_focus); // Ensure focused item is not
-							// clipped.
+					// clipped.
 					if (ms_io->RangeSrcItem != -1)
 						clipper.IncludeItemByIndex(
 							(int)ms_io
 								->RangeSrcItem); // Ensure RangeSrc item is
-							// not clipped.
+					// not clipped.
 				}
 
 				while (!use_clipper || clipper.Step()) {
@@ -5494,13 +5496,13 @@ static void DemoWindowWidgetsTextInput()
 				ImGuiInputTextFlags_CallbackCharFilter,
 				TextFilters::
 					FilterCasingSwap); // Use CharFilter callback to
-				// replace characters.
+			// replace characters.
 			static char buf7[32] = "";
 			ImGui::InputText("\"imgui\"", buf7, IM_ARRAYSIZE(buf7),
 				ImGuiInputTextFlags_CallbackCharFilter,
 				TextFilters::
 					FilterImGuiLetters); // Use CharFilter callback to
-				// disable some characters.
+			// disable some characters.
 			ImGui::TreePop();
 		}
 
@@ -5631,7 +5633,7 @@ static void DemoWindowWidgetsTextInput()
 							data->Buf);
 						my_str->resize(
 							data->BufSize); // NB: On resizing calls, generally
-							// data->BufSize == data->BufTextLen + 1
+						// data->BufSize == data->BufTextLen + 1
 						data->Buf = my_str->begin();
 					}
 					return 0;
@@ -6912,7 +6914,7 @@ static void DemoWindowLayout()
 						scroll_to_pos_px,
 					i * 0.25f);
 			if (child_is_visible) // Avoid calling SetScrollHereY when running
-					      // with culled items
+			// with culled items
 			{
 				for (int item = 0; item < 100; item++) {
 					if (enable_track &&
@@ -6970,7 +6972,7 @@ static void DemoWindowLayout()
 						scroll_to_pos_px,
 					i * 0.25f);
 			if (child_is_visible) // Avoid calling SetScrollHereY when running
-					      // with culled items
+			// with culled items
 			{
 				for (int item = 0; item < 100; item++) {
 					if (item > 0)
@@ -7499,7 +7501,7 @@ static void DemoWindowPopups()
 				if (ImGui::Selectable(names[n], selected == n))
 					selected = n;
 				if (ImGui::BeginPopupContextItem()) // <-- use last item id as
-								    // popup id
+				// popup id
 				{
 					selected = n;
 					ImGui::Text("This a popup for \"%s\"!",
@@ -8773,8 +8775,8 @@ static void DemoWindowTables()
 			ImGui::TableSetupScrollFreeze(freeze_cols, freeze_rows);
 			ImGui::TableSetupColumn("Line #",
 				ImGuiTableColumnFlags_NoHide); // Make the first column not
-				// hideable to match our use of
-				// TableSetupScrollFreeze()
+			// hideable to match our use of
+			// TableSetupScrollFreeze()
 			ImGui::TableSetupColumn("One");
 			ImGui::TableSetupColumn("Two");
 			ImGui::TableSetupColumn("Three");
@@ -9408,9 +9410,9 @@ static void DemoWindowTables()
 					if (node != &all_nodes[0])
 						node_flags &=
 							~ImGuiTreeNodeFlags_LabelSpanAllColumns; // Only
-							// demonstrate
-							// this on the
-							// root node.
+					// demonstrate
+					// this on the
+					// root node.
 
 					if (is_folder) {
 						bool open = ImGui::TreeNodeEx(
@@ -9667,8 +9669,8 @@ static void DemoWindowTables()
 
 			ImGui::TableAngledHeadersRow(); // Draw angled headers for all
 							// columns with the
-				// ImGuiTableColumnFlags_AngledHeader
-				// flag.
+			// ImGuiTableColumnFlags_AngledHeader
+			// flag.
 			ImGui::TableHeadersRow(); // Draw remaining headers and allow access
 				// to context-menu and other functions.
 			for (int row = 0; row < rows_count; row++) {
@@ -9873,8 +9875,8 @@ static void DemoWindowTables()
 				const int cell_count = (n == 1)
 					? 27
 					: 9; // Make second table have a scrollbar to
-					// verify that additional decoration is
-					// not affecting column positions.
+				// verify that additional decoration is
+				// not affecting column positions.
 				for (int cell = 0; cell < cell_count; cell++) {
 					ImGui::TableNextColumn();
 					ImGui::Text("this cell %d", cell);
@@ -11362,7 +11364,7 @@ void ImGui::ShowAboutWindow(bool *p_open)
 			ImGui::LogToClipboard();
 			ImGui::LogText(
 				"```cpp\n"); // Back quotes will make text appears without
-				// formatting when pasting on GitHub
+			// formatting when pasting on GitHub
 		}
 
 		ImGui::Text(
@@ -11604,7 +11606,7 @@ void ImGui::ShowStyleEditor(ImGuiStyle *ref)
 			    100.0f, "%.0f"))
 			style._NextFrameFontSizeBase =
 				style.FontSizeBase; // FIXME: Temporary hack until we finish
-						    // remaining work.
+				// remaining work.
 		SameLine(0.0f, 0.0f);
 		Text(" (out %.2f)", GetFontSize());
 		DragFloat("FontScaleMain", &style.FontScaleMain, 0.02f, 0.5f,
@@ -11621,7 +11623,7 @@ void ImGui::ShowStyleEditor(ImGuiStyle *ref)
 			    12.0f, "%.0f"))
 			style.GrabRounding =
 				style.FrameRounding; // Make GrabRounding always the
-				// same value as FrameRounding
+		// same value as FrameRounding
 		{
 			bool border = (style.WindowBorderSize > 0.0f);
 			if (Checkbox("WindowBorder", &border)) {
@@ -12115,9 +12117,9 @@ void ImGui::ShowStyleEditor(ImGuiStyle *ref)
 			DragFloat("Global Alpha", &style.Alpha, 0.005f, 0.20f,
 				1.0f,
 				"%.2f"); // Not exposing zero here so user doesn't "lose"
-				// the UI (zero alpha clips all widgets). But
-				// application code could have a toggle to switch
-				// between zero and non-zero.
+			// the UI (zero alpha clips all widgets). But
+			// application code could have a toggle to switch
+			// between zero and non-zero.
 			DragFloat("Disabled Alpha", &style.DisabledAlpha,
 				0.005f, 0.0f, 1.0f, "%.2f");
 			SameLine();
@@ -12977,7 +12979,7 @@ static void ShowExampleAppLayout(bool *p_open)
 			ImGui::BeginChild("item view",
 				ImVec2(0,
 					-ImGui::GetFrameHeightWithSpacing())); // Leave room for 1
-				// line below us
+			// line below us
 			ImGui::Text("MyObject: %d", selected);
 			ImGui::Separator();
 			if (ImGui::BeginTabBar(
@@ -13167,8 +13169,8 @@ struct ExampleAppPropertyEditor {
 		ImGuiTreeNodeFlags tree_flags = ImGuiTreeNodeFlags_None;
 		tree_flags |= ImGuiTreeNodeFlags_OpenOnArrow |
 			ImGuiTreeNodeFlags_OpenOnDoubleClick; // Standard opening mode as
-			// we are likely to want to
-			// add selection afterwards
+		// we are likely to want to
+		// add selection afterwards
 		tree_flags |=
 			ImGuiTreeNodeFlags_NavLeftJumpsToParent; // Left arrow support
 		tree_flags |=
@@ -13807,7 +13809,7 @@ static void ShowExampleAppCustomRendering(bool *p_open)
 					ImVec2(x + sz, y), col, th);
 				x += sz +
 					spacing; // Horizontal line (note: drawing a filled
-					// rectangle will be faster!)
+						 // rectangle will be faster!)
 				draw_list->AddLine(ImVec2(x, y),
 					ImVec2(x, y + sz), col, th);
 				x += spacing; // Vertical line (note: drawing a filled rectangle
@@ -13883,7 +13885,7 @@ static void ShowExampleAppCustomRendering(bool *p_open)
 				ImVec2(x + sz, y + thickness), col);
 			x += sz +
 				spacing; // Horizontal line (faster than AddLine, but only
-				// handle integer thickness)
+					 // handle integer thickness)
 			draw_list->AddRectFilled(ImVec2(x, y),
 				ImVec2(x + thickness, y + sz), col);
 			x += spacing *
@@ -14576,8 +14578,8 @@ struct ExampleAssetsBrowser {
 	int IconSpacing = 10;
 	int IconHitSpacing =
 		4; // Increase hit-spacing if you want to make it possible to clear or
-		// box-select from gaps. Some spacing is required to able to amend
-		// with Shift+box-select. Value is small in Explorer.
+	// box-select from gaps. Some spacing is required to able to amend
+	// with Shift+box-select. Value is small in Explorer.
 	bool StretchSpacing = true;
 
 	// State

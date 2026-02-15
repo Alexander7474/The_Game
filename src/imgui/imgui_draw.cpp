@@ -51,12 +51,13 @@ Index of this file:
 #pragma warning(                                                               \
 	disable : 4996) // 'This function or variable may be unsafe': strcpy,  \
 			// strdup, sprintf, vsnprintf, sscanf, fopen
-#pragma warning(                                                                   \
+#pragma warning(                                                               \
 	disable : 26451) // [Static Analyzer] Arithmetic overflow : Using operator \
 	// 'xxx' on a 4 byte value and then casting the result to                  \
 	// a 8 byte value. Cast the value to the wider type before                 \
 	// calling operator 'xxx' to avoid overflow(io.2).
-#pragma warning(disable : 26812) // [Static Analyzer] The enum type 'xxx' is   \
+#pragma warning(                                                               \
+	disable : 26812) // [Static Analyzer] The enum type 'xxx' is   \
 				 // unscoped. Prefer 'enum class' over 'enum'  \
 				 // (Enum.3). [MSVC Static Analyzer)
 #endif
@@ -64,7 +65,7 @@ Index of this file:
 // Clang/GCC warnings with -Weverything
 #if defined(__clang__)
 #if __has_warning("-Wunknown-warning-option")
-#pragma clang diagnostic ignored                                                  \
+#pragma clang diagnostic ignored                                               \
 	"-Wunknown-warning-option" // warning: unknown warning group 'xxx' // not \
 	// all warnings are known by all Clang versions                           \
 	// and they tend to be rename-happy.. so                                  \
@@ -73,7 +74,7 @@ Index of this file:
 #endif
 #pragma clang diagnostic ignored                                               \
 	"-Wunknown-pragmas" // warning: unknown warning group 'xxx'
-#pragma clang diagnostic ignored                                                   \
+#pragma clang diagnostic ignored                                               \
 	"-Wold-style-cast" // warning: use of old-style cast // yes, they are more \
 			   // terse.
 #pragma clang diagnostic ignored                                               \
@@ -86,7 +87,7 @@ Index of this file:
 	// what the exact difference is.
 #pragma clang diagnostic ignored                                               \
 	"-Wsign-conversion" // warning: implicit conversion changes signedness
-#pragma clang diagnostic ignored                                                    \
+#pragma clang diagnostic ignored                                               \
 	"-Wzero-as-null-pointer-constant" // warning: zero as null pointer constant \
 	// // some standard header variations use                                   \
 	// #define NULL 0
@@ -102,38 +103,39 @@ Index of this file:
 #pragma clang diagnostic ignored                                               \
 	"-Wimplicit-int-float-conversion" // warning: implicit conversion from \
 					  // 'xxx' to 'float' may lose precision
-#pragma clang diagnostic ignored                                                  \
+#pragma clang diagnostic ignored                                               \
 	"-Wreserved-identifier" // warning: identifier '_Xxx' is reserved because \
 	// it starts with '_' followed by a capital letter
-#pragma clang diagnostic ignored                                                \
+#pragma clang diagnostic ignored                                               \
 	"-Wunsafe-buffer-usage" // warning: 'xxx' is an unsafe pointer used for \
 				// buffer access
-#pragma clang diagnostic ignored                                                   \
+#pragma clang diagnostic ignored                                               \
 	"-Wnontrivial-memaccess" // warning: first argument in call to 'memset' is \
 				 // a pointer to non-trivially copyable type
-#pragma clang diagnostic ignored                                                  \
+#pragma clang diagnostic ignored                                               \
 	"-Wcast-qual" // warning: cast from 'const xxxx *' to 'xxx *' drops const \
 		      // qualifier
 #pragma clang diagnostic ignored                                               \
 	"-Wswitch-default" // warning: 'switch' missing 'default' label
 #elif defined(__GNUC__)
-#pragma GCC diagnostic ignored "-Wpragmas" // warning: unknown option after    \
+#pragma GCC diagnostic ignored                                                 \
+	"-Wpragmas" // warning: unknown option after    \
 					   // '#pragma GCC diagnostic' kind
 #pragma GCC diagnostic ignored                                                 \
 	"-Wunused-function" // warning: 'xxxx' defined but not used
-#pragma GCC diagnostic ignored                                                    \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wfloat-equal" // warning: comparing floating-point with '==' or '!=' is \
 			// unsafe
 #pragma GCC diagnostic ignored                                                 \
 	"-Wdouble-promotion" // warning: implicit conversion from 'float' to   \
 			     // 'double' when passing argument to function
-#pragma GCC diagnostic ignored                                                    \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wconversion" // warning: conversion to 'xxxx' from 'xxxx' may alter its \
 		       // value
 #pragma GCC diagnostic ignored                                                 \
 	"-Wstack-protector" // warning: stack protector not protecting local   \
 			    // variables: variable length buffer
-#pragma GCC diagnostic ignored                                                  \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wstrict-overflow" // warning: assuming signed overflow does not occur \
 	// when simplifying Diviseursion / ..when changing X +-                 \
 	// C1 cmp C2 to X cmp C2 -+ C1
@@ -142,7 +144,7 @@ Index of this file:
 	// clearing/writing an object of type 'xxxx' with no                   \
 	// trivial copy-assignment; use assignment or                          \
 	// value-initialization instead
-#pragma GCC diagnostic ignored                                                   \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wcast-qual" // warning: cast from type 'const xxxx *' to type 'xxxx *' \
 		      // casts away qualifiers
 #endif
@@ -169,7 +171,7 @@ namespace IMGUI_STB_NAMESPACE
 	disable : 4456) // declaration of 'xx' hides previous local declaration
 #pragma warning(                                                               \
 	disable : 6011) // (stb_rectpack) Dereferencing NULL pointer 'cur->next'.
-#pragma warning(                                                                   \
+#pragma warning(                                                               \
 	disable : 6385) // (stb_truetype) Reading invalid data from 'buffer':  the \
 	// readable size is '_Old_3`kernel_width' bytes, but '3'                   \
 	// bytes may be read.
@@ -188,7 +190,7 @@ namespace IMGUI_STB_NAMESPACE
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored                                                     \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wtype-limits" // warning: comparison is always true due to limited range \
 			// of data type [-Wtype-limits]
 #pragma GCC diagnostic ignored                                                 \
@@ -2704,7 +2706,7 @@ void ImDrawListSplitter::ClearFreeMemory()
 		if (i == _Current)
 			memset(&_Channels[i], 0,
 				sizeof(_Channels[i])); // Current channel is a copy of
-				// CmdBuffer/IdxBuffer, don't destruct again
+		// CmdBuffer/IdxBuffer, don't destruct again
 		_Channels[i]._CmdBuffer.clear();
 		_Channels[i]._IdxBuffer.clear();
 	}
@@ -3399,7 +3401,7 @@ ImFontAtlas::ImFontAtlas()
 	TexMaxHeight = 8192;
 	RendererHasTextures =
 		false; // Assumed false by default, as apps can call e.g Atlas::Build()
-		       // after backend init and before ImGui can update.
+		// after backend init and before ImGui can update.
 	TexNextUniqueID = 1;
 	FontNextUniqueID = 1;
 	Builder = NULL;
@@ -3592,7 +3594,7 @@ void ImFontAtlasUpdateNewFrame(
 			else
 				tex->Status =
 					ImTextureStatus_WantCreate; // Destroy was done was backend
-					// (e.g. freed resources mid-run)
+			// (e.g. freed resources mid-run)
 		} else if (tex->WantDestroyNextFrame &&
 			tex->Status != ImTextureStatus_WantDestroy) {
 			// Request destroy. Keep bool as it allows us to keep track of
@@ -3871,13 +3873,13 @@ ImFont *ImFontAtlas::AddFont(const ImFontConfig *font_cfg_in)
 	} else {
 		IM_ASSERT(Fonts.Size > 0 &&
 			"Cannot use MergeMode for the first font"); // When using
-			// MergeMode make sure
-			// that a font has
-			// already been added
-			// before. You can use
-			// ImGui::GetIO().Fonts->AddFontDefault()
-			// to add the default
-			// imgui font.
+		// MergeMode make sure
+		// that a font has
+		// already been added
+		// before. You can use
+		// ImGui::GetIO().Fonts->AddFontDefault()
+		// to add the default
+		// imgui font.
 		font = Fonts.back();
 	}
 
@@ -3889,7 +3891,7 @@ ImFont *ImFontAtlas::AddFont(const ImFontConfig *font_cfg_in)
 	font->Sources.push_back(font_cfg);
 	ImFontAtlasBuildUpdatePointers(
 		this); // Pointers to Sources are otherwise dangling after we called
-		       // Sources.push_back().
+		// Sources.push_back().
 
 	if (font_cfg->FontDataOwnedByAtlas == false) {
 		font_cfg->FontDataOwnedByAtlas = true;
@@ -4661,7 +4663,7 @@ static ImFontGlyph *ImFontAtlasBuildSetupFontBakedEllipsis(
 	glyph->AdvanceX = ImMax(dot_glyph->AdvanceX,
 		dot_glyph->X0 + dot_step * 3.0f -
 			dot_spacing); // FIXME: Slightly odd for normally mono-space fonts
-		// but since this is used for trailing contents.
+	// but since this is used for trailing contents.
 	glyph->X0 = dot_glyph->X0;
 	glyph->Y0 = dot_glyph->Y0;
 	glyph->X1 = dot_glyph->X0 + dot_step * 3 - dot_spacing;
@@ -5641,9 +5643,9 @@ void ImFontAtlasDebugLogTextureRequests(ImFontAtlas *atlas)
 				IM_ASSERT(r.x + r.w <= tex->Width &&
 					r.y + r.h <=
 						tex->Height); // In theory should subtract
-					// PackPadding but it's currently
-					// part of atlas and mid-frame
-					// change would wreck assert.
+				// PackPadding but it's currently
+				// part of atlas and mid-frame
+				// change would wreck assert.
 				// IMGUI_DEBUG_LOG_FONT("[font] Texture #%03d: update (%
 				// 4d..%-4d)->(% 4d..%-4d), texid=0x%" IM_PRIX64 ",
 				// backend_data=0x%" IM_PRIX64 "\n", tex->UniqueID, r.x, r.y, r.x
@@ -9580,7 +9582,7 @@ ImFontBaked *ImFontAtlasBakedGetOrAdd(ImFontAtlas *atlas, ImFont *font,
 				"Cannot use dynamic font size with a locked "
 				"ImFontAtlas!"); // Locked because rendering backend
 						 // does not support
-				// ImGuiBackendFlags_RendererHasTextures!
+			// ImGuiBackendFlags_RendererHasTextures!
 			return NULL;
 		}
 	}
@@ -9590,7 +9592,7 @@ ImFontBaked *ImFontAtlasBakedGetOrAdd(ImFontAtlas *atlas, ImFont *font,
 		atlas, font, font_size, font_rasterizer_density, baked_id);
 	*p_baked_in_map =
 		baked; // To avoid 'builder->BakedMap.SetVoidPtr(baked_id,
-		       // baked);' while we can.
+		// baked);' while we can.
 	return baked;
 }
 
@@ -9635,7 +9637,7 @@ const char *ImFont::CalcWordWrapPosition(
 	float blank_width = 0.0f;
 	wrap_width /=
 		scale; // We work with unscaled widths to avoid scaling every
-		       // characters
+		// characters
 
 	const char *word_end = text;
 	const char *prev_word_end = NULL;
@@ -9884,8 +9886,8 @@ begin:
 		text_end = text_begin +
 			ImStrlen(
 				text_begin); // ImGui:: functions generally already
-			// provides a valid text_end, so this
-			// is merely to handle direct calls.
+	// provides a valid text_end, so this
+	// is merely to handle direct calls.
 
 	const float line_height = size;
 	ImFontBaked *baked = GetFontBaked(size);

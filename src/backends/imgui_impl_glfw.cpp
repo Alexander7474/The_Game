@@ -955,10 +955,10 @@ static bool ImGui_ImplGlfw_Init(
 	io.BackendPlatformName = bd->BackendPlatformName;
 	io.BackendFlags |=
 		ImGuiBackendFlags_HasMouseCursors; // We can honor GetMouseCursor()
-						   // values (optional)
+		// values (optional)
 	io.BackendFlags |=
 		ImGuiBackendFlags_HasSetMousePos; // We can honor io.WantSetMousePos
-		// requests (optional, rarely used)
+	// requests (optional, rarely used)
 
 	bd->Context = ImGui::GetCurrentContext();
 	bd->Window = window;

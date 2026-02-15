@@ -1174,7 +1174,7 @@ enum { // encodingID for STBTT_PLATFORM_ID_MAC; same as Script Manager codes
 	STBTT_MAC_EID_RUSSIAN = 7
 };
 
-enum {	// languageID for STBTT_PLATFORM_ID_MICROSOFT; same as LCID...
+enum { // languageID for STBTT_PLATFORM_ID_MICROSOFT; same as LCID...
 	// problematic because there are e.g. 16 english LCIDs and 16 arabic
 	// LCIDs
 	STBTT_MS_LANG_ENGLISH = 0x0409,
@@ -1924,7 +1924,7 @@ static int stbtt__GetGlyphShapeTT(
 
 		off = m -
 			n; // starting offset for uninterpreted data, regardless of how
-			// m ends up being calculated
+			   // m ends up being calculated
 
 		// first load flags
 
@@ -3759,7 +3759,7 @@ static void stbtt__fill_active_edges_new(float *scanline, float *scanline_fill,
 							dy = (y_final -
 								     y_crossing) /
 								denom; // if denom=0, y_final = y_crossing, so
-								// y_final <= y_bottom
+							// y_final <= y_bottom
 						}
 					}
 
@@ -3778,7 +3778,7 @@ static void stbtt__fill_active_edges_new(float *scanline, float *scanline_fill,
 
 					step = sign * dy *
 						1; // dy is dy/dx, change in y for every 1
-						// change in x,
+						   // change in x,
 					// which multiplied by 1-pixel-width is how much pixel area
 					// changes for each step in x so the area advances by 'step'
 					// every time
@@ -3790,7 +3790,7 @@ static void stbtt__fill_active_edges_new(float *scanline, float *scanline_fill,
 					}
 					STBTT_assert(STBTT_fabs(area) <=
 						1.01f); // accumulated error from area +=
-						// step unless we round step down
+					// step unless we round step down
 					STBTT_assert(sy1 > y_final - 0.01f);
 
 					// area covered in the last pixel is the rectangle from all
@@ -3975,7 +3975,7 @@ static void stbtt__rasterize_sorted_edges(stbtt__bitmap *result, stbtt__edge *e,
 					}
 					STBTT_assert(z->ey >=
 						scan_y_top); // if we get really unlucky a tiny bit of
-						// an edge can be out of bounds
+					// an edge can be out of bounds
 					// insert at front
 					z->next = active;
 					active = z;
@@ -4211,7 +4211,7 @@ static int stbtt__tesselate_curve(stbtt__point *points, int *num_points,
 		return 1;
 	if (dx * dx + dy * dy >
 		objspace_flatness_squared) { // half-pixel error allowed... need to be
-					     // smaller if AA
+		// smaller if AA
 		stbtt__tesselate_curve(points, num_points, x0, y0,
 			(x0 + x1) / 2.0f, (y0 + y1) / 2.0f, mx, my,
 			objspace_flatness_squared, n + 1);
@@ -5497,8 +5497,8 @@ STBTT_DEF unsigned char *stbtt_GetGlyphSDF(const stbtt_fontinfo *info,
 				int winding = stbtt__compute_crossings_x(
 					x_gspace, y_gspace, num_verts,
 					verts); // @OPTIMIZE: this could just be a rasterization, but
-					// needs to be line vs. non-tesselated curves so a new
-					// path
+				// needs to be line vs. non-tesselated curves so a new
+				// path
 
 				for (i = 0; i < num_verts; ++i) {
 					float x0 = verts[i].x * scale_x,
@@ -5640,7 +5640,7 @@ STBTT_DEF unsigned char *stbtt_GetGlyphSDF(const stbtt_fontinfo *info,
 									(ax * bx +
 										ay * by) *
 									a_inv; // could precompute this as it
-									// doesn't depend on sample point
+								// doesn't depend on sample point
 								float c =
 									(2 * (ax * ax + ay * ay) +
 										(mx * bx +

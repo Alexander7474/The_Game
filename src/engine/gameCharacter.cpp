@@ -35,7 +35,8 @@ std::string bodyStateToString(BodyState e) noexcept
 }
 
 GameCharacter::GameCharacter(std::string characterFolder)
-    : legs(*RessourceManager::getTexture()), body(*RessourceManager::getTexture())
+    : legs(*RessourceManager::getTexture()),
+      body(*RessourceManager::getTexture())
 {
 	acceleration = 2500.f;
 	deceleration = 10.f;
@@ -341,6 +342,6 @@ Weapon *GameCharacter::dropWeapon()
 	weapon = new Fist();
 	bState.second = weapon->getName();
 	lastWeaponSwitch = glfwGetTime();
-        tmp->throwAway(lookingPoint);
+	tmp->throwAway(lookingPoint);
 	return tmp;
 }

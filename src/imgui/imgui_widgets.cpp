@@ -63,7 +63,7 @@ Separator, etc.)
 #pragma warning(disable : 5054)		  // operator '|': deprecated between  \
 					  // enumerations of different types
 #endif
-#pragma warning(                                                                   \
+#pragma warning(                                                               \
 	disable : 26451) // [Static Analyzer] Arithmetic overflow : Using operator \
 	// 'xxx' on a 4 byte value and then casting the result to                  \
 	// a 8 byte value. Cast the value to the wider type before                 \
@@ -76,7 +76,7 @@ Separator, etc.)
 // Clang/GCC warnings with -Weverything
 #if defined(__clang__)
 #if __has_warning("-Wunknown-warning-option")
-#pragma clang diagnostic ignored                                                  \
+#pragma clang diagnostic ignored                                               \
 	"-Wunknown-warning-option" // warning: unknown warning group 'xxx' // not \
 	// all warnings are known by all Clang versions                           \
 	// and they tend to be rename-happy.. so                                  \
@@ -85,17 +85,17 @@ Separator, etc.)
 #endif
 #pragma clang diagnostic ignored                                               \
 	"-Wunknown-pragmas" // warning: unknown warning group 'xxx'
-#pragma clang diagnostic ignored                                                   \
+#pragma clang diagnostic ignored                                               \
 	"-Wold-style-cast" // warning: use of old-style cast // yes, they are more \
 			   // terse.
 #pragma clang diagnostic ignored                                               \
 	"-Wfloat-equal" // warning: comparing floating point with == or != is  \
 	// unsafe // storing and comparing against same constants              \
 	// (typically 0.0f) is ok.
-#pragma clang diagnostic ignored                                                \
+#pragma clang diagnostic ignored                                               \
 	"-Wformat" // warning: format specifies type 'int' but the argument has \
 		   // type 'unsigned int'
-#pragma clang diagnostic ignored                                                   \
+#pragma clang diagnostic ignored                                               \
 	"-Wformat-nonliteral" // warning: format string is not a string literal // \
 			      // passing non-literal to vsnformat(). yes, user     \
 	// passing incorrect format strings can crash the                          \
@@ -106,7 +106,7 @@ Separator, etc.)
 	"-Wunused-macros" // warning: macro is not used // we define           \
 	// snprintf/vsnprintf on Windows so they are available,                \
 	// but not always used.
-#pragma clang diagnostic ignored                                                    \
+#pragma clang diagnostic ignored                                               \
 	"-Wzero-as-null-pointer-constant" // warning: zero as null pointer constant \
 	// // some standard header variations use                                   \
 	// #define NULL 0
@@ -115,11 +115,11 @@ Separator, etc.)
 			     // 'double' when passing argument to function  // \
 	// using printf() is a misery with this as C++ va_arg                  \
 	// ellipsis changes float to double.
-#pragma clang diagnostic ignored                                                 \
+#pragma clang diagnostic ignored                                               \
 	"-Wenum-enum-conversion" // warning: bitwise operation between different \
 				 // enumeration types ('XXXFlags_' and           \
 				 // 'XXXFlagsPrivate_')
-#pragma clang diagnostic ignored                                                  \
+#pragma clang diagnostic ignored                                               \
 	"-Wdeprecated-enum-enum-conversion" // warning: bitwise operation between \
 					    // different enumeration types        \
 	// ('XXXFlags_' and 'XXXFlagsPrivate_')                                   \
@@ -127,27 +127,28 @@ Separator, etc.)
 #pragma clang diagnostic ignored                                               \
 	"-Wimplicit-int-float-conversion" // warning: implicit conversion from \
 					  // 'xxx' to 'float' may lose precision
-#pragma clang diagnostic ignored                                                \
+#pragma clang diagnostic ignored                                               \
 	"-Wunsafe-buffer-usage" // warning: 'xxx' is an unsafe pointer used for \
 				// buffer access
-#pragma clang diagnostic ignored                                                   \
+#pragma clang diagnostic ignored                                               \
 	"-Wnontrivial-memaccess" // warning: first argument in call to 'memset' is \
 				 // a pointer to non-trivially copyable type
 #pragma clang diagnostic ignored                                               \
 	"-Wswitch-default" // warning: 'switch' missing 'default' label
 #elif defined(__GNUC__)
-#pragma GCC diagnostic ignored "-Wpragmas" // warning: unknown option after    \
+#pragma GCC diagnostic ignored                                                 \
+	"-Wpragmas" // warning: unknown option after    \
 					   // '#pragma GCC diagnostic' kind
-#pragma GCC diagnostic ignored                                                    \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wfloat-equal" // warning: comparing floating-point with '==' or '!=' is \
 			// unsafe
-#pragma GCC diagnostic ignored                                                     \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wformat" // warning: format '%p' expects argument of type 'int'/'void*', \
 		   // but argument X has type 'unsigned int'/'ImGuiWindow*'
 #pragma GCC diagnostic ignored                                                 \
 	"-Wformat-nonliteral" // warning: format not a string literal, format  \
 			      // string not checked
-#pragma GCC diagnostic ignored                                                    \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wdeprecated-enum-enum-conversion" // warning: bitwise operation between \
 					    // different enumeration types        \
 	// ('XXXFlags_' and 'XXXFlagsPrivate_')                                   \
@@ -155,7 +156,7 @@ Separator, etc.)
 #pragma GCC diagnostic ignored                                                 \
 	"-Wdouble-promotion" // warning: implicit conversion from 'float' to   \
 			     // 'double' when passing argument to function
-#pragma GCC diagnostic ignored                                                  \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wstrict-overflow" // warning: assuming signed overflow does not occur \
 	// when simplifying Diviseursion / ..when changing X +-                 \
 	// C1 cmp C2 to X cmp C2 -+ C1
@@ -164,7 +165,7 @@ Separator, etc.)
 	// clearing/writing an object of type 'xxxx' with no                   \
 	// trivial copy-assignment; use assignment or                          \
 	// value-initialization instead
-#pragma GCC diagnostic ignored                                                   \
+#pragma GCC diagnostic ignored                                                 \
 	"-Wcast-qual" // warning: cast from type 'const xxxx *' to type 'xxxx *' \
 		      // casts away qualifiers
 #endif
@@ -176,10 +177,10 @@ Separator, etc.)
 // Widgets
 static const float DRAGDROP_HOLD_TO_OPEN_TIMER =
 	0.70f; // Time for drag-hold to activate items accepting the
-	       // ImGuiButtonFlags_PressedOnDragDropHold button behavior.
+	// ImGuiButtonFlags_PressedOnDragDropHold button behavior.
 static const float DRAG_MOUSE_THRESHOLD_FACTOR =
 	0.50f; // Multiplier for the default value of io.MouseDragThreshold to
-	       // make DragFloat/DragInt react faster to mouse drags.
+	// make DragFloat/DragInt react faster to mouse drags.
 
 // Those MIN/MAX values are not define because we need to point to them
 static const signed char IM_S8_MIN = -128;
@@ -482,7 +483,7 @@ void ImGui::TextAlignedV(
 	ItemAdd(ImRect(pos, pos + size), 0);
 	window->DC.CursorMaxPos.x =
 		backup_max_pos.x; // Cancel out extending content size because
-		// right-aligned text would otherwise mess it up.
+	// right-aligned text would otherwise mess it up.
 
 	if (size_x < text_size.x &&
 		IsItemHovered(ImGuiHoveredFlags_NoNavOverride |
@@ -830,23 +831,23 @@ bool ImGui::ButtonBehavior(const ImRect &bb, ImGuiID id, bool *out_hovered,
 							ImGuiButtonFlags_NoFocus)) {
 						FocusWindow(window,
 							ImGuiFocusRequestFlags_RestoreFocusedChild); // Still
-							// need
-							// to
-							// focus
-							// and
-							// bring
-							// to
-							// front,
-							// but
-							// try
-							// to
-							// avoid
-							// losing
-							// NavId
-							// when
-							// navigating
-							// a
-							// child
+						// need
+						// to
+						// focus
+						// and
+						// bring
+						// to
+						// front,
+						// but
+						// try
+						// to
+						// avoid
+						// losing
+						// NavId
+						// when
+						// navigating
+						// a
+						// child
 					}
 				}
 				if ((flags & ImGuiButtonFlags_PressedOnClick) ||
@@ -873,23 +874,23 @@ bool ImGui::ButtonBehavior(const ImRect &bb, ImGuiID id, bool *out_hovered,
 							ImGuiButtonFlags_NoFocus)) {
 						FocusWindow(window,
 							ImGuiFocusRequestFlags_RestoreFocusedChild); // Still
-							// need
-							// to
-							// focus
-							// and
-							// bring
-							// to
-							// front,
-							// but
-							// try
-							// to
-							// avoid
-							// losing
-							// NavId
-							// when
-							// navigating
-							// a
-							// child
+						// need
+						// to
+						// focus
+						// and
+						// bring
+						// to
+						// front,
+						// but
+						// try
+						// to
+						// avoid
+						// losing
+						// NavId
+						// when
+						// navigating
+						// a
+						// child
 					}
 				}
 			}
@@ -901,15 +902,15 @@ bool ImGui::ButtonBehavior(const ImRect &bb, ImGuiID id, bool *out_hovered,
 						g.IO.MouseDownDurationPrev
 								[mouse_button_released] >=
 							g.IO.KeyRepeatDelay; // Repeat mode trumps on
-						// release behavior
+					// release behavior
 					if (!has_repeated_at_least_once)
 						pressed = true;
 					if (!(flags &
 						    ImGuiButtonFlags_NoNavFocus))
 						SetFocusID(id,
 							window); // FIXME: Lack of FocusWindow()
-							// call here is inconsistent with
-							// other paths. Research why.
+					// call here is inconsistent with
+					// other paths. Research why.
 					ClearActiveID();
 				}
 			}
@@ -1015,7 +1016,7 @@ bool ImGui::ButtonBehavior(const ImRect &bb, ImGuiID id, bool *out_hovered,
 						g.IO.MouseDownDurationPrev
 								[mouse_button] >=
 							g.IO.KeyRepeatDelay; // Repeat mode trumps
-						// <on release>
+					// <on release>
 					bool is_button_avail_or_owned =
 						TestKeyOwner(
 							MouseButtonToKey(
@@ -1409,7 +1410,7 @@ bool ImGui::ScrollbarEx(const ImRect &bb_frame, ImGuiID id, ImGuiAxis axis,
 	// size in pixel to allow for the user to still aim inside.
 	IM_ASSERT(ImMax(size_contents_v, size_visible_v) >
 		0.0f); // Adding this assert to check if the ImMax(XXX,1.0f) is
-		       // still needed. PLEASE CONTACT ME if this triggers.
+		// still needed. PLEASE CONTACT ME if this triggers.
 	const ImS64 win_size_v =
 		ImMax(ImMax(size_contents_v, size_visible_v), (ImS64)1);
 	const float grab_h_minsize =
@@ -2201,8 +2202,8 @@ void ImGui::SeparatorEx(ImGuiSeparatorFlags flags, float thickness)
 		const float thickness_for_layout = (thickness == 1.0f)
 			? 0.0f
 			: thickness; // FIXME: See 1.70/1.71 Separator() change: makes
-			// legacy 1-px separator not affect layout yet.
-			// Should change.
+		// legacy 1-px separator not affect layout yet.
+		// Should change.
 		const ImRect bb(ImVec2(x1, window->DC.CursorPos.y),
 			ImVec2(x2, window->DC.CursorPos.y + thickness));
 		ItemSize(ImVec2(0.0f, thickness_for_layout));
@@ -2360,7 +2361,7 @@ bool ImGui::SplitterBehavior(const ImRect &bb, ImGuiID id, ImGuiAxis axis,
 	if (hovered)
 		g.LastItemData.StatusFlags |=
 			ImGuiItemStatusFlags_HoveredRect; // for IsItemHovered(), because
-			// bb_interact is larger than bb
+	// bb_interact is larger than bb
 
 	if (held ||
 		(hovered && g.HoveredIdPreviousFrame == id &&
@@ -2675,7 +2676,7 @@ bool ImGui::BeginComboPopup(
 				(flags & ImGuiComboFlags_PopupAlignLeft)
 				? ImGuiDir_Left
 				: ImGuiDir_Down; // Left = "Below, Toward Left", Down =
-				// "Below, Toward Right (default)"
+			// "Below, Toward Right (default)"
 			ImRect r_outer =
 				GetPopupAllowedExtentRect(popup_window);
 			ImVec2 pos = FindBestWindowPosForPopupEx(bb.GetBL(),
@@ -2730,7 +2731,7 @@ bool ImGui::BeginComboPreview()
 		g.LastItemData.Rect.Min.y ==
 			preview_data->PreviewRect.Min
 				.y); // Didn't call after BeginCombo/EndCombo block or
-		// forgot to pass ImGuiComboFlags_CustomPreview flag?
+	// forgot to pass ImGuiComboFlags_CustomPreview flag?
 	if (!window->ClipRect.Overlaps(
 		    preview_data->PreviewRect)) // Narrower test (optional)
 		return false;
@@ -4060,22 +4061,22 @@ float ImGui::ScaleRatioFromValueT(ImGuiDataType data_type, TYPE v, TYPE v_min,
 		if (v_clamped <= v_min_fudged)
 			result =
 				0.0f; // Workaround for values that are in-range but below our
-				// fudge
+				      // fudge
 		else if (v_clamped >= v_max_fudged)
 			result =
 				1.0f; // Workaround for values that are in-range but above our
-				// fudge
+				      // fudge
 		else if ((v_min * v_max) <
 			0.0f) // Range crosses zero, so split into two portions
 		{
 			float zero_point_center = (-(float)v_min) /
 				((float)v_max -
 					(float)v_min); // The zero point in parametric space.
-				// There's an argument we should take the
-				// logarithmic nature into account when
-				// calculating this, but for now this
-				// should do (and the most common case of a
-				// symmetrical range works fine)
+			// There's an argument we should take the
+			// logarithmic nature into account when
+			// calculating this, but for now this
+			// should do (and the most common case of a
+			// symmetrical range works fine)
 			float zero_point_snap_L =
 				zero_point_center - zero_deadzone_halfsize;
 			float zero_point_snap_R =
@@ -4178,7 +4179,7 @@ TYPE ImGui::ScaleValueFromRatioT(ImGuiDataType data_type, float t, TYPE v_min,
 				t_with_flip <= zero_point_snap_R)
 				result =
 					(TYPE)0.0f; // Special case to make getting exactly zero
-					// possible (the epsilon prevents it otherwise)
+			// possible (the epsilon prevents it otherwise)
 			else if (t_with_flip < zero_point_center)
 				result = (TYPE) -
 					(logarithmic_zero_epsilon *
@@ -4261,7 +4262,7 @@ bool ImGui::SliderBehaviorT(const ImRect &bb, ImGuiID id,
 			0.0f) // v_range_f < 0 may happen on integer overflows
 		grab_sz = ImMax(slider_sz / (v_range_f + 1),
 			style.GrabMinSize); // For integer sliders: if possible
-			// have the grab size represent 1 unit
+	// have the grab size represent 1 unit
 	grab_sz = ImMin(grab_sz, slider_sz);
 	const float slider_usable_sz = slider_sz - grab_sz;
 	const float slider_usable_pos_min =
@@ -4316,7 +4317,7 @@ bool ImGui::SliderBehaviorT(const ImRect &bb, ImGuiID id,
 						(mouse_abs_pos <= grab_pos +
 								grab_sz * 0.5f +
 								1.0f); // No harm being extra
-						// generous here.
+					// generous here.
 					g.SliderGrabClickOffset =
 						(clicked_around_grab &&
 							is_floating_point)
@@ -4361,7 +4362,7 @@ bool ImGui::SliderBehaviorT(const ImRect &bb, ImGuiID id,
 				if (decimal_precision > 0) {
 					input_delta /=
 						100.0f; // Keyboard/Gamepad tweak speeds in %
-						// of slider bounds
+							// of slider bounds
 					if (tweak_slow)
 						input_delta /= 10.0f;
 				} else {
@@ -4374,7 +4375,7 @@ bool ImGui::SliderBehaviorT(const ImRect &bb, ImGuiID id,
 									? -1.0f
 									: +1.0f) /
 							v_range_f; // Keyboard/Gamepad tweak speeds
-							// in integer steps
+					// in integer steps
 					else
 						input_delta /= 100.0f;
 				}
@@ -4405,7 +4406,7 @@ bool ImGui::SliderBehaviorT(const ImRect &bb, ImGuiID id,
 					set_new_value = false;
 					g.SliderCurrentAccum =
 						0.0f; // If pushing up against the limits,
-						// don't continue to accumulate
+					// don't continue to accumulate
 				} else {
 					set_new_value = true;
 					float old_clicked_t = clicked_t;
@@ -5171,9 +5172,9 @@ bool ImGui::TempInputScalar(const ImRect &bb, ImGuiID id, const char *label,
 		(ImGuiInputTextFlags)ImGuiInputTextFlags_LocalizeDecimalPoint;
 	g.LastItemData.ItemFlags |=
 		ImGuiItemFlags_NoMarkEdited; // Because TempInputText() uses
-		// ImGuiInputTextFlags_MergedItem it
-		// doesn't submit a new item, so we poke
-		// LastItemData.
+	// ImGuiInputTextFlags_MergedItem it
+	// doesn't submit a new item, so we poke
+	// LastItemData.
 	bool value_changed = false;
 	if (TempInputText(
 		    bb, id, label, data_buf, IM_ARRAYSIZE(data_buf), flags)) {
@@ -5841,7 +5842,7 @@ static void stb_textedit_replace(ImGuiInputTextState *str,
 		return;
 	}
 	IM_ASSERT(0); // Failed to insert character, normally shouldn't happen
-		      // because of how we currently use stb_textedit_replace()
+		// because of how we currently use stb_textedit_replace()
 }
 
 } // namespace ImStb
@@ -6039,7 +6040,7 @@ static bool InputTextFilterCharacter(ImGuiContext *ctx, unsigned int *p_char,
 		pass |= (c == '\n') &&
 			(flags & ImGuiInputTextFlags_Multiline) !=
 				0; // Note that an Enter KEY will emit \r and be
-			// ignored (we poll for KEY in InputText() code)
+		// ignored (we poll for KEY in InputText() code)
 		if (c == '\n' && input_source_is_clipboard &&
 			(flags & ImGuiInputTextFlags_Multiline) ==
 				0) // In single line mode, replace \n with a space
@@ -6260,15 +6261,15 @@ bool ImGui::InputTextEx(const char *label, const char *hint, char *buf,
 	IM_ASSERT(!((flags & ImGuiInputTextFlags_CallbackHistory) &&
 		(flags &
 			ImGuiInputTextFlags_Multiline))); // Can't use both together
-		// (they both use up/down keys)
+	// (they both use up/down keys)
 	IM_ASSERT(!((flags & ImGuiInputTextFlags_CallbackCompletion) &&
 		(flags &
 			ImGuiInputTextFlags_AllowTabInput))); // Can't use both together
-		// (they both use tab key)
+	// (they both use tab key)
 	IM_ASSERT(!((flags & ImGuiInputTextFlags_ElideLeft) &&
 		(flags &
 			ImGuiInputTextFlags_Multiline))); // Multiline will not work
-							  // with left-trimming
+		// with left-trimming
 
 	ImGuiContext &g = *GImGui;
 	ImGuiIO &io = g.IO;
@@ -6347,8 +6348,8 @@ bool ImGui::InputTextEx(const char *label, const char *hint, char *buf,
 		draw_window->DC.NavLayersActiveMaskNext |= (1
 			<< draw_window->DC
 				   .NavLayerCurrent); // This is to ensure that EndChild()
-			// will display a navigation highlight
-			// so we can "enter" into it.
+		// will display a navigation highlight
+		// so we can "enter" into it.
 		draw_window->DC.CursorPos += style.FramePadding;
 		inner_size.x -= draw_window->ScrollbarSizes.x;
 	} else {
@@ -6751,7 +6752,7 @@ bool ImGui::InputTextEx(const char *label, const char *hint, char *buf,
 		const bool is_wordmove_key_down = is_osx
 			? io.KeyAlt
 			: io.KeyCtrl; // OS X style: Text editing cursor
-				      // movement using Alt instead of Ctrl
+			// movement using Alt instead of Ctrl
 		const bool is_startend_key_down = is_osx && io.KeyCtrl &&
 			!io.KeySuper &&
 			!io.KeyAlt; // OS X style: Line/Text Start and End using
@@ -7154,7 +7155,7 @@ bool ImGui::InputTextEx(const char *label, const char *hint, char *buf,
 						? buf
 						: state->TextA
 							  .Data; // Pointer may have been invalidated
-						// by a resize callback
+					// by a resize callback
 					IM_ASSERT(callback_data.Buf ==
 						callback_buf); // Invalid to modify those fields
 					IM_ASSERT(callback_data.BufSize ==
@@ -7200,7 +7201,7 @@ bool ImGui::InputTextEx(const char *label, const char *hint, char *buf,
 							(int)ImStrlen(
 								callback_data
 									.Buf)); // You need to maintain BufTextLen if
-							// you change the text!
+						// you change the text!
 						InputTextReconcileUndoState(
 							state,
 							state->CallbackTextBackup
@@ -7214,8 +7215,8 @@ bool ImGui::InputTextEx(const char *label, const char *hint, char *buf,
 						state->TextLen =
 							callback_data
 								.BufTextLen; // Assume correct length and valid
-							// UTF-8 from user, saves us an
-							// extra strlen()
+						// UTF-8 from user, saves us an
+						// extra strlen()
 						state->CursorAnimReset();
 					}
 				}
@@ -7484,8 +7485,8 @@ bool ImGui::InputTextEx(const char *label, const char *hint, char *buf,
 				render_cursor
 					? 1.0f
 					: 0.6f); // FIXME: current code flow mandate that
-				// render_cursor is always true here, we are
-				// leaving the transparent one for tests.
+			// render_cursor is always true here, we are
+			// leaving the transparent one for tests.
 			float bg_offy_up = is_multiline
 				? 0.0f
 				: -1.0f; // FIXME: those offsets should be
@@ -7578,7 +7579,7 @@ bool ImGui::InputTextEx(const char *label, const char *hint, char *buf,
 			if (!is_readonly && g.ActiveId == id) {
 				ImGuiPlatformImeData *ime_data =
 					&g.PlatformImeData; // (this is a public struct, passed to
-					// io.Platform_SetImeDataFn() handler)
+				// io.Platform_SetImeDataFn() handler)
 				ime_data->WantVisible = true;
 				ime_data->WantTextInput = true;
 				ime_data->InputPos = ImVec2(
@@ -8341,7 +8342,7 @@ bool ImGui::ColorPicker4(const char *label, float col[4],
 					(sv_picker_size - 1));
 			ColorEditRestoreH(col,
 				&H); // Greatly reduces hue jitter and reset to 0 when hue == 255
-				// and color is rapidly modified using SV square.
+			// and color is rapidly modified using SV square.
 			value_changed = value_changed_sv = true;
 		}
 		if (!(flags & ImGuiColorEditFlags_NoOptions))
@@ -9491,9 +9492,9 @@ bool ImGui::TreeNodeBehavior(ImGuiID id, ImGuiTreeNodeFlags flags,
 			if (flags & ImGuiTreeNodeFlags_OpenOnArrow)
 				toggled |= is_mouse_x_over_arrow &&
 					!g.NavHighlightItemUnderNav; // Lightweight equivalent of
-					// IsMouseHoveringRect()
-					// since ButtonBehavior()
-					// already did the job
+			// IsMouseHoveringRect()
+			// since ButtonBehavior()
+			// already did the job
 			if ((flags & ImGuiTreeNodeFlags_OpenOnDoubleClick) &&
 				g.IO.MouseClickedCount[0] == 2)
 				toggled = true; // Double click
@@ -9552,7 +9553,7 @@ bool ImGui::TreeNodeBehavior(ImGuiID id, ImGuiTreeNodeFlags flags,
 		if (is_multi_select)
 			nav_render_cursor_flags |=
 				ImGuiNavRenderCursorFlags_AlwaysDraw; // Always show the nav
-				// rectangle
+		// rectangle
 		if (display_frame) {
 			// Framed type
 			const ImU32 bg_col = GetColorU32((held && hovered)
@@ -10092,7 +10093,7 @@ bool ImGui::Selectable(const char *label, bool selected,
 			if (is_multi_select)
 				nav_render_cursor_flags |=
 					ImGuiNavRenderCursorFlags_AlwaysDraw; // Always show the nav
-					// rectangle
+			// rectangle
 			RenderNavCursor(bb, id, nav_render_cursor_flags);
 		}
 	}
@@ -10264,10 +10265,10 @@ ImGuiTypingSelectRequest *ImGui::GetTypingSelectRequest(
 		out_request->SingleCharSize = (ImS8)c0_len;
 		data->SingleCharModeLock |= (single_char_count >=
 			TYPING_SELECT_SINGLE_CHAR_COUNT_FOR_LOCK); // From now on we
-			// stop search
-			// matching to lock
-			// to single char
-			// mode.
+		// stop search
+		// matching to lock
+		// to single char
+		// mode.
 	}
 
 	return out_request;
@@ -10297,7 +10298,7 @@ int ImGui::TypingSelectFindMatch(ImGuiTypingSelectRequest *req, int items_count,
 	if (req == NULL ||
 		req->SelectRequest ==
 			false) // Support NULL parameter so both calls
-			       // can be done from same spot.
+		// can be done from same spot.
 		return -1;
 	int idx = -1;
 	if (req->SingleCharMode &&
@@ -10525,8 +10526,8 @@ bool ImGui::BeginBoxSelect(const ImRect &scope_rect, ImGuiWindow *window,
 			bs->UnclipMode = true;
 			bs->UnclipRect =
 				bs->BoxSelectRectPrev; // FIXME-OPT: UnclipRect x coordinates
-				// could be intersection of Prev and Curr
-				// rect on X axis.
+			// could be intersection of Prev and Curr
+			// rect on X axis.
 			bs->UnclipRect.Add(bs->BoxSelectRectCurr);
 		}
 
@@ -10683,8 +10684,8 @@ ImGuiMultiSelectIO *ImGui::BeginMultiSelect(
 		if (table->CurrentColumn != -1)
 			TableEndCell(
 				table); // This is currently safe to call multiple time. If
-				// that properly is lost we can extract the "save
-				// measurement" part of it.
+	// that properly is lost we can extract the "save
+	// measurement" part of it.
 
 	// FIXME: BeginFocusScope()
 	const ImGuiID id = window->IDStack.back();
@@ -10885,8 +10886,8 @@ ImGuiMultiSelectIO *ImGui::EndMultiSelect()
 						ms->FocusScopeId,
 						ImRect(g.IO.MousePos,
 							g.IO.MousePos)); // Automatically switch FocusScope
-						// for initial click from void to
-						// box-select.
+				// for initial click from void to
+				// box-select.
 			}
 		}
 
@@ -11129,8 +11130,8 @@ void ImGui::MultiSelectItemFooter(ImGuiID id, bool *p_selected, bool *p_pressed)
 					bs->IsStartedSetNavIdOnce) {
 					pressed =
 						true; // First item act as a pressed: code below will
-						// emit selection request and set NavId (whatever
-						// we emit here will be overridden anyway)
+					// emit selection request and set NavId (whatever
+					// we emit here will be overridden anyway)
 					bs->IsStartedSetNavIdOnce = false;
 				} else {
 					selected = !selected;
@@ -11220,7 +11221,7 @@ void ImGui::MultiSelectItemFooter(ImGuiID id, bool *p_selected, bool *p_pressed)
 				is_shift && !is_ctrl)
 				request_clear =
 					true; // With is_shift==false the RequestClear was done
-					// in BeginIO, not necessary to do again.
+			// in BeginIO, not necessary to do again.
 			if (request_clear)
 				MultiSelectAddSetAll(ms, false);
 		}
@@ -11452,7 +11453,7 @@ static void ImGuiSelectionBasicStorage_BatchSetItemSelected(
 	if (selected && !is_contained)
 		storage->Data.push_back(ImGuiStoragePair(id,
 			selection_order)); // Push unsorted at end of vector, will be
-			// sorted in SelectionMultiAmendsFinish()
+	// sorted in SelectionMultiAmendsFinish()
 	else if (is_contained)
 		it->val_i = selected ? selection_order : 0; // Modify in-place.
 	selection->Size += selected ? +1 : -1;
@@ -12154,7 +12155,7 @@ void ImGui::EndMenuBar()
 
 	IM_MSVC_WARNING_SUPPRESS(
 		6011); // Static Analysis false positive "warning
-		       // C6011: Dereferencing NULL pointer 'window'"
+		// C6011: Dereferencing NULL pointer 'window'"
 	IM_ASSERT(window->Flags & ImGuiWindowFlags_MenuBar);
 	IM_ASSERT(window->DC.MenuBarAppending);
 
@@ -12190,7 +12191,7 @@ void ImGui::EndMenuBar()
 			if (g.NavCursorVisible) {
 				g.NavCursorVisible =
 					false; // Hide nav cursor for the current frame so we don't
-					// see the intermediary selection. Will be set again
+				// see the intermediary selection. Will be set again
 				g.NavCursorHideFrames = 2;
 			}
 			g.NavHighlightItemUnderNav = g.NavMousePosDirty = true;
@@ -12205,7 +12206,7 @@ void ImGui::EndMenuBar()
 	window->DC.MenuBarOffset.x = window->DC.CursorPos.x -
 		window->Pos
 			.x; // Save horizontal position so next append can reuse it.
-		// This is kinda equivalent to a per-layer CursorPos.
+	// This is kinda equivalent to a per-layer CursorPos.
 
 	// FIXME: Extremely confusing, cleanup by (a) working on WorkRect stack
 	// system (b) not using a Group confusingly here.
@@ -12311,9 +12312,9 @@ void ImGui::EndMainMenuBar()
 	if (!g.CurrentWindow->DC.MenuBarAppending) {
 		IM_ASSERT_USER_ERROR(0,
 			"Calling EndMainMenuBar() not from a menu-bar!"); // Not technically
-			// testing that it
-			// is the main menu
-			// bar
+		// testing that it
+		// is the main menu
+		// bar
 		return;
 	}
 
@@ -12404,7 +12405,7 @@ bool ImGui::BeginMenuEx(const char *label, const char *icon, bool enabled)
 		if (menu_is_open)
 			menu_is_open = BeginPopupMenuEx(id, label,
 				window_flags); // menu_is_open can be 'false' when the popup is
-				// completely clipped (e.g. zero size display)
+		// completely clipped (e.g. zero size display)
 		else
 			g.NextWindowData
 				.ClearFlags(); // we behave like Begin() and need to
@@ -12467,8 +12468,8 @@ bool ImGui::BeginMenuEx(const char *label, const char *icon, bool enabled)
 		window->DC.CursorPos.x += IM_TRUNC(style.ItemSpacing.x *
 			(-1.0f +
 				0.5f)); // -1 spacing to compensate the spacing added when
-			// Selectable() did a SameLine(). It would also work to
-			// call SameLine() ourselves after the PopStyleVar().
+		// Selectable() did a SameLine(). It would also work to
+		// call SameLine() ourselves after the PopStyleVar().
 	} else {
 		// Menu inside a regular/vertical menu
 		// (In a typical menu window where all items are BeginMenu() or
@@ -12555,7 +12556,7 @@ bool ImGui::BeginMenuEx(const char *label, const char *icon, bool enabled)
 				ImMax((tb.y - pad_farmost_h) - ta.y,
 					-ref_unit *
 						8.0f); // Triangle has maximum height to limit the
-				// slope and the bias toward large sub-menus
+			// slope and the bias toward large sub-menus
 			tc.y = ta.y +
 				ImMin((tc.y + pad_farmost_h) - ta.y,
 					+ref_unit * 8.0f);
@@ -12640,22 +12641,22 @@ bool ImGui::BeginMenuEx(const char *label, const char *icon, bool enabled)
 		menu_is_open = true;
 		OpenPopup(label,
 			ImGuiPopupFlags_NoReopen); // | (want_open_nav_init ?
-			// ImGuiPopupFlags_NoReopenAlwaysNavInit
-			// : 0));
+		// ImGuiPopupFlags_NoReopenAlwaysNavInit
+		// : 0));
 	}
 
 	if (menu_is_open) {
 		ImGuiLastItemData last_item_in_parent = g.LastItemData;
 		SetNextWindowPos(popup_pos,
 			ImGuiCond_Always); // Note: misleading: the value will serve as
-			// reference for FindBestWindowPosForPopup(), not
-			// actual pos.
+		// reference for FindBestWindowPosForPopup(), not
+		// actual pos.
 		PushStyleVar(ImGuiStyleVar_ChildRounding,
 			style.PopupRounding); // First level will use _PopupRounding,
-			// subsequent will use _ChildRounding
+		// subsequent will use _ChildRounding
 		menu_is_open = BeginPopupMenuEx(id, label,
 			window_flags); // menu_is_open may be 'false' when the popup is
-			// completely clipped (e.g. zero size display)
+		// completely clipped (e.g. zero size display)
 		PopStyleVar();
 		if (menu_is_open) {
 			// Implement what ImGuiPopupFlags_NoReopenAlwaysNavInit would do:
@@ -12768,8 +12769,8 @@ bool ImGui::MenuItemEx(const char *label, const char *icon,
 		window->DC.CursorPos.x += IM_TRUNC(style.ItemSpacing.x *
 			(-1.0f +
 				0.5f)); // -1 spacing to compensate the spacing added when
-			// Selectable() did a SameLine(). It would also work to
-			// call SameLine() ourselves after the PopStyleVar().
+		// Selectable() did a SameLine(). It would also work to
+		// call SameLine() ourselves after the PopStyleVar().
 	} else {
 		// Menu item inside a vertical menu
 		// (In a typical menu window where all items are BeginMenu() or

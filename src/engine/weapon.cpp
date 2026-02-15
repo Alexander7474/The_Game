@@ -42,13 +42,15 @@ Weapon::Weapon(WeaponName name, std::string texturePath, std::string soundPath)
 	sound = RessourceManager::getSound(soundPath);
 }
 
-void Weapon::update() { 
-	move(dir.x*speed*DELTA_TIME,dir.y*speed*DELTA_TIME);
-        setRotation(getRotation()+ (speed*DELTA_TIME*0.1));
-        speed *= 1 - deceleration * static_cast<float>(DELTA_TIME);
-        if(speed <= 0.f)
-                speed = 0.f;
-        shapeCollisionBox.setPosition(getPosition());
+void Weapon::update()
+{
+	const double rotationReduction = 0.1;
+	move(dir.x * speed * DELTA_TIME, dir.y * speed * DELTA_TIME);
+	setRotation(getRotation() + (speed * DELTA_TIME * rotationReduction));
+	speed *= 1 - deceleration * static_cast<float>(DELTA_TIME);
+	if (speed <= 0.f)
+		speed = 0.f;
+	shapeCollisionBox.setPosition(getPosition());
 
 #ifdef IMGUI_DEBUG
 	// Interface character info
@@ -62,15 +64,16 @@ void Weapon::update() {
 
 void Weapon::use() { Mix_PlayChannel(-1, sound, 0); }
 
-void Weapon::throwAway(glm::vec2 cible){
+void Weapon::throwAway(glm::vec2 cible)
+{
 	// calcule direction
 	glm::vec2 pos(getPosition().x, getPosition().y);
 	glm::vec2 d = cible - pos;
-        this->dir = glm::normalize(d);
+	this->dir = glm::normalize(d);
 
 	float angle = atan2(dir.y, dir.x);
 	setRotation(angle);
-        speed = 1000.f;
+	speed = 1000.f;
 }
 
 const WeaponName Weapon::getName() { return name; }
