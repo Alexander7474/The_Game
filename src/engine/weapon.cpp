@@ -1,3 +1,9 @@
+#ifdef IMGUI_DEBUG
+#include "../backends/imgui_impl_glfw.h"
+#include "../backends/imgui_impl_opengl3.h"
+#include "../imgui/imgui.h"
+#endif
+
 #include "weapon.h"
 #include "../game/game.h"
 #include "ressourceManager.h"
@@ -27,6 +33,7 @@ Weapon::Weapon(WeaponName name, std::string texturePath, std::string soundPath)
     : Sprite(*RessourceManager::getTexture(texturePath))
 {
 	this->name = name;
+	deceleration = 10.f;
 	setSize(64, 64);
 	setOrigin(32, 32);
 	getCollisionBox().setSize(32, 32);
@@ -35,9 +42,36 @@ Weapon::Weapon(WeaponName name, std::string texturePath, std::string soundPath)
 	sound = RessourceManager::getSound(soundPath);
 }
 
-void Weapon::update() { shapeCollisionBox.setPosition(getPosition()); }
+void Weapon::update() { 
+	move(dir.x*speed*DELTA_TIME,dir.y*speed*DELTA_TIME);
+        setRotation(getRotation()+ (speed*DELTA_TIME*0.1));
+        speed *= 1 - deceleration * static_cast<float>(DELTA_TIME);
+        if(speed <= 0.f)
+                speed = 0.f;
+        shapeCollisionBox.setPosition(getPosition());
+
+#ifdef IMGUI_DEBUG
+	// Interface character info
+	ImGui::Begin("Weapons Info");
+	ImGui::Text("Position: (%f, %f)", getPosition().x, getPosition().y);
+	ImGui::Text("dir vector: (%f, %f)", dir.x, dir.y);
+	ImGui::Text("speed: %f", speed);
+	ImGui::End();
+#endif
+}
 
 void Weapon::use() { Mix_PlayChannel(-1, sound, 0); }
+
+void Weapon::throwAway(glm::vec2 cible){
+	// calcule direction
+	glm::vec2 pos(getPosition().x, getPosition().y);
+	glm::vec2 d = cible - pos;
+        this->dir = glm::normalize(d);
+
+	float angle = atan2(dir.y, dir.x);
+	setRotation(angle);
+        speed = 1000.f;
+}
 
 const WeaponName Weapon::getName() { return name; }
 

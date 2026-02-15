@@ -18,6 +18,9 @@ class Weapon : public Sprite
       private:
 	WeaponName name;
 	Mix_Chunk *sound;
+	glm::vec2 dir;
+	float deceleration;
+        float speed;
 
       public:
 	Weapon(WeaponName name = WeaponName::fist,
@@ -29,6 +32,11 @@ class Weapon : public Sprite
 	void use();
 
 	const WeaponName getName();
+
+        /**
+         * @brief Set the gun a direction to throw him away
+         */
+        void throwAway(glm::vec2 cible);
 
 	virtual ~Weapon() = default;
 };
@@ -52,10 +60,10 @@ class Firearme : public Weapon
 	bool canFire();
 
 	/**
-   * @brief Fais tirer l'arme
-   *
-   * @param dir direction de la balle
-   */
+        * @brief Fais tirer l'arme
+        *
+        * @param dir direction de la balle
+        */
 	void fire(glm::vec2 cible);
 };
 

@@ -341,5 +341,6 @@ Weapon *GameCharacter::dropWeapon()
 	weapon = new Fist();
 	bState.second = weapon->getName();
 	lastWeaponSwitch = glfwGetTime();
+        tmp->throwAway(lookingPoint);
 	return tmp;
 }
